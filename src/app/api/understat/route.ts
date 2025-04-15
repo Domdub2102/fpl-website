@@ -46,8 +46,8 @@ export async function GET() {
         // Extract xG and xGA for each team
         const teamStats = Object.values(teamsData).map((team): Team => ({
             team: team.title,
-            xG: team.history.reduce((sum: number, match: any) => sum + parseFloat(match.xG), 0), // Sum of xG
-            xGA: team.history.reduce((sum: number, match: any) => sum + parseFloat(match.xGA), 0), // Sum of xGA
+            xG: team.history.reduce((sum, match) => sum + parseFloat(match.xG), 0), // Sum of xG
+            xGA: team.history.reduce((sum, match) => sum + parseFloat(match.xGA), 0), // Sum of xGA
         }));
 
         // Replace strings which don't match other data from FPL API
