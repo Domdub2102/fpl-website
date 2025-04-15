@@ -60,7 +60,6 @@ export default function SquadManager(
                         setSquadState={setSquadState} 
                         selectedPlayers={selectedPlayers} 
                         setSelectedPlayers={setSelectedPlayers}
-                        setOldPlayer={setOldPlayer}
                     />
                 </div>
                 <div className='flex flex-col basis-1/3 p-[10px] bg-teal-200 shadow-lg'>

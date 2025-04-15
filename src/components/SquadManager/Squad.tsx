@@ -14,7 +14,6 @@ interface SquadPropTypes {
     setSquadState: React.Dispatch<React.SetStateAction<SquadType>>
     selectedPlayers: Player[]
     setSelectedPlayers: React.Dispatch<React.SetStateAction<Player[]>>
-    setOldPlayer: React.Dispatch<React.SetStateAction<Player | undefined>>
 }
 
 export default function Squad({ 
@@ -22,7 +21,6 @@ export default function Squad({
     setSquadState, 
     selectedPlayers, 
     setSelectedPlayers,
-    setOldPlayer
 }: SquadPropTypes) {
 
     /* ADD THESE FUNCTIONS BACK TO THE NEW DIALOG FEATURE
