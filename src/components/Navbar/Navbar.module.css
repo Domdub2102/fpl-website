@@ -1,0 +1,30 @@
+.navbar {
+    box-sizing: border-box;
+    width: 100vw;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #37013E;
+    padding: 0 40px 0 20px;
+}
+
+.navbarLogo {
+    text-decoration: none;
+    font-size: 2.5rem;
+    color: white;
+    font-weight: 800;
+}
+
+.navbarLink {
+    text-decoration: none;
+    margin-left: 40px;
+    font-size: 1.1rem;
+    color: white;
+    transition: all 0.1s;
+    font-weight: 600;
+}
+
+.navbarLink:hover {
+    color: #c0fcf7;
+}
