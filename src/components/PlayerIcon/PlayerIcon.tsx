@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-export default function PlayerIcon({ name, team, fixture, selectPlayerToSwap, selectPlayerToTransfer }) {
+export default function PlayerIcon({ name, team, fixture }) {
   return (
     <div className='relative flex flex-col items-center text-center border-2 border-transparent rounded-md hover:border-white'>
         <div className='w-[90px]'>

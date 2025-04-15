@@ -4,6 +4,12 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
+interface Team {
+    team: string
+    xG: string
+    xGA: string
+}
+
 export async function GET() {
     try {
         const URL = "https://understat.com/league/epl";
@@ -38,7 +44,7 @@ export async function GET() {
         const teamsData = JSON.parse(decodedJsonString);
 
         // Extract xG and xGA for each team
-        const teamStats = Object.values(teamsData).map((team) => ({
+        const teamStats = Object.values(teamsData).map((team): Team => ({
             team: team.title,
             xG: team.history.reduce((sum: number, match: any) => sum + parseFloat(match.xG), 0), // Sum of xG
             xGA: team.history.reduce((sum: number, match: any) => sum + parseFloat(match.xGA), 0), // Sum of xGA
