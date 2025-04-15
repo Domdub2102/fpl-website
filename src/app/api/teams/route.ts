@@ -1,7 +1,7 @@
 // returns all the teams from the FPL API
 
 import { NextResponse } from "next/server";
-
+import { Team } from "@/types/types";
 
 export async function GET() {
     const url = "https://fantasy.premierleague.com/api"
@@ -13,7 +13,7 @@ export async function GET() {
     const fixtures = await fixtureResponse.json()
 
     // creates teams object to then populate wih fixture data
-    const teams = mainData.teams.map(team => {
+    const teams = mainData.teams.map((team: Team) => {
         return {
             id: team.id,
             name: team.name,
@@ -30,8 +30,8 @@ export async function GET() {
         const { team_a, team_h, event, finished } = fixture
     
         // Find the home and away team objects from the array
-        const homeTeam = teams.find((team) => team.id === team_h)
-        const awayTeam = teams.find((team) => team.id === team_a)
+        const homeTeam = teams.find((team: Team) => team.id === team_h)
+        const awayTeam = teams.find((team: Team) => team.id === team_a)
     
         if (homeTeam) {
             homeTeam.fixtures.push(

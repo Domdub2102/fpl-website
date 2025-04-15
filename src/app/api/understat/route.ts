@@ -4,11 +4,22 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-interface Team {
-    team: string
-    xG: string
-    xGA: string
+interface MatchStats {
+    xG: string;
+    xGA: string;
 }
+  
+interface Team {
+    name: string;
+    xG: number;
+    xGA: number;
+}
+
+interface RawTeamData {
+    title: string;
+    history: MatchStats[];
+}
+
 
 export async function GET() {
     try {
@@ -44,14 +55,15 @@ export async function GET() {
         const teamsData = JSON.parse(decodedJsonString);
 
         // Extract xG and xGA for each team
-        const teamStats = Object.values(teamsData).map((team): Team => ({
-            team: team.title,
-            xG: team.history.reduce((sum, match) => sum + parseFloat(match.xG), 0), // Sum of xG
-            xGA: team.history.reduce((sum, match) => sum + parseFloat(match.xGA), 0), // Sum of xGA
-        }));
+        const teamStats = Object.values(teamsData as Record<string, RawTeamData>).map((team): Team => ({
+            name: team.title,
+            xG: team.history.reduce((sum, match) => sum + parseFloat(match.xG), 0),
+            xGA: team.history.reduce((sum, match) => sum + parseFloat(match.xGA), 0),
+          }));
+          
 
         // Replace strings which don't match other data from FPL API
-        const replacements = {
+        const replacements: Record<string, string> = {
             "Tottenham": "Spurs",
             "Manchester United": "Man Utd",
             "Manchester City": "Man City",
@@ -59,12 +71,11 @@ export async function GET() {
             "Wolverhampton Wanderers": "Wolves"
         }
         
-        const updatedTeams = teamStats.map(team => {
-            const updatedTeam = { ...team };
-        
-            // Replace team names based on the lookup table
-            updatedTeam.team = replacements[updatedTeam.team] || updatedTeam.team;
-        
+        const updatedTeams: Team[] = teamStats.map((team: Team): Team => {
+            const updatedTeam: Team = { ...team };
+          
+            updatedTeam.name = replacements[updatedTeam.name] || updatedTeam.name;
+          
             return updatedTeam;
         });
 

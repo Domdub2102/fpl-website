@@ -5,13 +5,22 @@ import Squad from './Squad'
 import PlayersTable from './PlayersTable'
 import { transferPlayer } from '@/utils/utils'
 import { PlayerDialog } from '@/components/PlayerDialog/PlayerDialog'
+import { SquadType, Player, Team } from '@/types/types'
 
-export default function SquadManager({ squad, players, teams }) {
+interface PropTypes {
+    squad: SquadType
+    players: Player[]
+    teams: Team[]
+}
+
+export default function SquadManager(
+    { squad, players, teams }: PropTypes
+) {
     const [squadState, setSquadState] = React.useState(squad);
-    const [selectedPlayers, setSelectedPlayers] = React.useState([]);
+    const [selectedPlayers, setSelectedPlayers] = React.useState<Player[]>([]);
 
-    const [oldPlayer, setOldPlayer] = React.useState()
-    const [newPlayer, setNewPlayer] = React.useState()
+    const [oldPlayer, setOldPlayer] = React.useState<Player>()
+    const [newPlayer, setNewPlayer] = React.useState<Player>()
 
     function makeTransfer() {
         const updatedSquad = transferPlayer(squadState, newPlayer, oldPlayer)
@@ -51,10 +60,7 @@ export default function SquadManager({ squad, players, teams }) {
                         setSquadState={setSquadState} 
                         selectedPlayers={selectedPlayers} 
                         setSelectedPlayers={setSelectedPlayers}
-                        oldPlayer={oldPlayer}
                         setOldPlayer={setOldPlayer}
-                        newPlayer={newPlayer}
-                        setNewPlayer={setNewPlayer}
                     />
                 </div>
                 <div className='flex flex-col basis-1/3 p-[10px] bg-teal-200 shadow-lg'>
@@ -89,11 +95,6 @@ export default function SquadManager({ squad, players, teams }) {
                     <input id="player-search" placeholder='Player Search' className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'></input>
                     <PlayersTable 
                         players={players}
-                        squadState={squadState} 
-                        setSquadState={setSquadState} 
-                        selectedPlayers={selectedPlayers} 
-                        setSelectedPlayers={setSelectedPlayers}
-                        newPlayer={newPlayer}
                         setNewPlayer={setNewPlayer}
                     />
                 </div>

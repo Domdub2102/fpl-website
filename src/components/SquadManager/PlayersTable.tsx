@@ -1,12 +1,15 @@
 'use client'
 
 import React from 'react'
+import { Player } from '@/types/types'
+
+interface Props {
+    players: Player[]
+    setNewPlayer: React.Dispatch<React.SetStateAction<Player| undefined>>
+}
 
 export default function PlayersTable (
-    { 
-        players, 
-        setNewPlayer
-    } 
+    { players, setNewPlayer}: Props
 ) { 
 
     const [currentPage, setCurrentPage] = React.useState(1)
@@ -29,7 +32,7 @@ export default function PlayersTable (
         }
     }
 
-    function selectNewPlayerToSwap(player) {
+    function selectNewPlayerToSwap(player: Player) {
         setNewPlayer(player)
     }
 

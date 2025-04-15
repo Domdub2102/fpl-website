@@ -1,3 +1,9 @@
+interface Gameweek {
+    id: number
+    name: string
+    deadline: string
+}
+
 async function fetchGameweeks() {
     const res = await fetch("http://localhost:3000/api/gameweeks/", {
         method: "GET",
@@ -11,7 +17,7 @@ async function fetchGameweeks() {
 export default async function Page() {
     const data = await fetchGameweeks()
     
-    const gameweeks = data.map(gameweek => {
+    const gameweeks = data.map((gameweek: Gameweek) => {
         return (
             <div key={gameweek.id}>
                 <h1>{gameweek.name}</h1>

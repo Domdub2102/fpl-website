@@ -1,12 +1,8 @@
-/**
- * Notes:
- * Only allow user to do direct swaps (ie. mid for mid):
- * this will help with formation state management
- */
-
 import React from 'react'
 import { createInitialSquad, createFullSquad } from '@/utils/utils'
 import SquadManager from '@/components/SquadManager/SquadManager'
+import { Player, Team } from '@/types/types'
+
 
 async function fetchTeams() {
   const url = `${process.env.NEXT_PUBLIC_SITE_URL}/api/teams/`
@@ -40,8 +36,14 @@ export default async function PlayersPage() {
   const teams = await fetchTeams()
   const players = await fetchPlayers()
 
-  const updatedPlayers = players.map((player) => {
-    const team = teams.find(team => team.id === player.team_id)
+  const updatedPlayers = players.map((player: Player) => {
+    const team = teams.find((team: Team) => team.id === player.team_id)
+    
+    if (!team) {
+      console.log(`no team found for player ${player.web_name}`)
+      return {...player, team_name: "Unknown", fixtures: []}
+    }
+
     return {
       ...player,
       team_name: team.name,
@@ -57,9 +59,8 @@ export default async function PlayersPage() {
 
   // sorts the players, initially by total points
   const sortedPlayers = updatedPlayers.sort(
-    (p1, p2) => (p1.total_points < p2.total_points) ? 1 : (p1.total_points > p2.total_points) ? -1 : 0
+    (p1: Player, p2: Player) => (p1.total_points < p2.total_points) ? 1 : (p1.total_points > p2.total_points) ? -1 : 0
   );
 
-  
   return <SquadManager squad={fullSquad} players={sortedPlayers} teams={teams}/>
 }

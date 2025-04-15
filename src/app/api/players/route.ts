@@ -1,19 +1,5 @@
 import { NextResponse } from "next/server";
-
-interface Player {
-    id: number
-    web_name: string
-    first_name: string
-    second_name: string
-    total_points: number
-    expected_goals: string
-    expected_assists: string
-    minutes: number 
-    now_cost: number
-    element_type: number
-    selected_by_percent: number
-    team: number 
-}
+import { Player } from "@/types/types";
 
 export async function GET() {
     const url = "https://fantasy.premierleague.com/api/elements/"

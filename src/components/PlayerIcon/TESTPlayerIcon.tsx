@@ -14,16 +14,16 @@ import {
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import PlayerIcon from "./PlayerIcon"
+import { Player } from '@/types/types'
 
-export function TestPlayerIcon({ player, selectPlayerToSwap, selectPlayerToTransfer }) {
+
+export function TestPlayerIcon({ player }: {player: Player}) {
     return (
         <Dialog>
           <DialogTrigger asChild>
             <button className='cursor-pointer'>
                 <PlayerIcon 
                     key={player.id}
-                    selectPlayerToSwap={() => selectPlayerToSwap(player)}
-                    selectPlayerToTransfer={() => selectPlayerToTransfer(player)}
                     name={player.web_name}
                     team={player.team_name}
                     fixture={`${player.fixtures[32].opponent_short} (${player.fixtures[32].home_away})`}

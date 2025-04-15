@@ -3,11 +3,19 @@
 import React from "react"
 import { swapPlayers } from "@/utils/utils"
 import { TestPlayerIcon } from "../PlayerIcon/TESTPlayerIcon"
+import { SquadType, Player } from "@/types/types"
 
 /**
  * Problems:
  * need to put limits on the numbers of players in each position
  */
+interface SquadPropTypes {
+    squadState: SquadType
+    setSquadState: React.Dispatch<React.SetStateAction<SquadType>>
+    selectedPlayers: Player[]
+    setSelectedPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+    setOldPlayer: React.Dispatch<React.SetStateAction<Player | undefined>>
+}
 
 export default function Squad({ 
     squadState, 
@@ -15,10 +23,10 @@ export default function Squad({
     selectedPlayers, 
     setSelectedPlayers,
     setOldPlayer
-}) {
+}: SquadPropTypes) {
 
     // Ensure selectPlayer logic is correct (only add player if not already selected)
-    function selectPlayerToSwap(newPlayer) {
+    function selectPlayerToSwap(newPlayer: Player) {
         setSelectedPlayers(prevSelectedPlayers => {
             if (prevSelectedPlayers.some(player => player.id === newPlayer.id)) {
                 return prevSelectedPlayers;
@@ -28,7 +36,7 @@ export default function Squad({
         });
     }
 
-    function selectPlayerToTransfer(player) {
+    function selectPlayerToTransfer(player: Player) {
         setOldPlayer(player)
     }
 
@@ -63,8 +71,6 @@ export default function Squad({
                         <TestPlayerIcon 
                             key={player.id}
                             player={player}
-                            selectPlayerToSwap={selectPlayerToSwap}
-                            selectPlayerToTransfer={selectPlayerToTransfer}
                         />
                     ))}
                 </div>
@@ -76,8 +82,6 @@ export default function Squad({
                     <TestPlayerIcon 
                         key={player.id}
                         player={player}
-                        selectPlayerToSwap={selectPlayerToSwap}
-                        selectPlayerToTransfer={selectPlayerToTransfer}
                     />
                 ))}
             </div>
