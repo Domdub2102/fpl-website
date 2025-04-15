@@ -1,7 +1,6 @@
 'use client'
 
 import React from "react"
-import PlayerIcon from "../PlayerIcon/PlayerIcon"
 import { swapPlayers } from "@/utils/utils"
 import { TestPlayerIcon } from "../PlayerIcon/TESTPlayerIcon"
 
@@ -15,7 +14,6 @@ export default function Squad({
     setSquadState, 
     selectedPlayers, 
     setSelectedPlayers,
-    oldPlayer,
     setOldPlayer
 }) {
 

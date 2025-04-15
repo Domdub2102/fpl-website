@@ -27,7 +27,7 @@ export async function GET() {
         // 🔹 Extract JSON-like part
         const startIdx = scriptText.indexOf("JSON.parse('") + 12; // Skip "JSON.parse('"
         const endIdx = scriptText.indexOf("')", startIdx); // Find the closing ')'
-        let encodedJsonString = scriptText.substring(startIdx, endIdx).trim(); // Extract encoded JSON
+        const encodedJsonString = scriptText.substring(startIdx, endIdx).trim(); // Extract encoded JSON
 
         // 🔹 Decode Unicode escape sequences
         const decodedJsonString = encodedJsonString.replace(/\\x([0-9A-Fa-f]{2})/g, (_, hex) =>
@@ -38,7 +38,7 @@ export async function GET() {
         const teamsData = JSON.parse(decodedJsonString);
 
         // Extract xG and xGA for each team
-        const teamStats = Object.values(teamsData).map((team: any) => ({
+        const teamStats = Object.values(teamsData).map((team) => ({
             team: team.title,
             xG: team.history.reduce((sum: number, match: any) => sum + parseFloat(match.xG), 0), // Sum of xG
             xGA: team.history.reduce((sum: number, match: any) => sum + parseFloat(match.xGA), 0), // Sum of xGA
@@ -54,7 +54,7 @@ export async function GET() {
         }
         
         const updatedTeams = teamStats.map(team => {
-            let updatedTeam = { ...team };
+            const updatedTeam = { ...team };
         
             // Replace team names based on the lookup table
             updatedTeam.team = replacements[updatedTeam.team] || updatedTeam.team;

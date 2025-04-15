@@ -5,16 +5,8 @@
  */
 
 import React from 'react'
-import PlayersTable from '@/components/SquadManager/PlayersTable'
-import Squad from '@/components/SquadManager/Squad'
-import { addXgToTeams, createInitialSquad, createFullSquad } from '@/utils/utils'
+import { createInitialSquad, createFullSquad } from '@/utils/utils'
 import SquadManager from '@/components/SquadManager/SquadManager'
-
-interface Team {
-  id: number
-  name: string
-  short_name: string
-}
 
 async function fetchTeams() {
   const url = `${process.env.NEXT_PUBLIC_SITE_URL}/api/teams/`

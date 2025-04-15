@@ -2,31 +2,12 @@
 
 import React from 'react'
 
-async function fetchPlayers() {
-    const url = `${process.env.NEXT_PUBLIC_SITE_URL}/api/players`
-    const res = await fetch(url, {
-        method: "GET"
-    })
-
-    if (!res.ok) {
-        throw new Error("Failed to fetch players from internal server")
-    }
-
-    const data = await res.json()
-    return data
-}
-
-export default function PlayersTable(
+export default function PlayersTable (
     { 
         players, 
-        squadState, 
-        setSquadState, 
-        selectedPlayers, 
-        setSelectedPlayers,
-        newPlayer,
         setNewPlayer
-    }
-) {
+    } 
+) { 
 
     const [currentPage, setCurrentPage] = React.useState(1)
     const pageSize = 10
