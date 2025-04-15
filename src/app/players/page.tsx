@@ -5,7 +5,7 @@ import { Player, Team } from '@/types/types'
 
 
 async function fetchTeams() {
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/api/teams/`
+  const url = "http://localhost:3000/api/teams/"
   const res = await fetch(url, {
       method: "GET",
   })
