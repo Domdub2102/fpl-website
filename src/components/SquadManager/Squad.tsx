@@ -25,7 +25,7 @@ export default function Squad({
     setOldPlayer
 }: SquadPropTypes) {
 
-    // Ensure selectPlayer logic is correct (only add player if not already selected)
+    /* ADD THESE FUNCTIONS BACK TO THE NEW DIALOG FEATURE
     function selectPlayerToSwap(newPlayer: Player) {
         setSelectedPlayers(prevSelectedPlayers => {
             if (prevSelectedPlayers.some(player => player.id === newPlayer.id)) {
@@ -39,6 +39,7 @@ export default function Squad({
     function selectPlayerToTransfer(player: Player) {
         setOldPlayer(player)
     }
+    */
 
     function completeSwap() {
         const updatedSquad = swapPlayers(selectedPlayers, squadState)
