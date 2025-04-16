@@ -1,57 +1,40 @@
+'use client'
+
+import React from 'react'
 import { Button } from "../ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
-import { Input } from "../ui/input"
-import { Label } from "../ui/label"
+import { Player } from '@/types/types'
 
-export function PlayerDialog() {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="btn btn-circle w-[18px] h-[18px]">
-          <img src="/info-icon2.png"/>
-        </button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when youre done.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              defaultValue="Pedro Duarte"
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input
-              id="username"
-              defaultValue="@peduarte"
-              className="col-span-3"
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
+type Props = {
+  player: Player
+  openDialog: React.ReactNode
+}
+
+export function PlayerDialog({ player, openDialog }: Props) {
+    return (
+        <Dialog>
+          <DialogTrigger asChild>
+              <button>{openDialog}</button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[300px]">
+            <DialogHeader>
+              <DialogTitle className='text-center mb-5'>{player.first_name + " " + player.second_name}</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col justify-center items-center gap-4">
+              <div className="">
+                <Button className='cursor-pointer'>Substitute</Button>
+              </div>
+              <div className="">
+                <Button className='cursor-pointer'>Transfer Out</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )
 }

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Player } from '@/types/types'
+import { PlayerDialog } from '../PlayerDialog/PlayerDialog'
 
 interface Props {
     players: Player[]
@@ -41,9 +42,10 @@ export default function PlayersTable (
             <table className='table'>
                 <thead className='text-black'>
                     <tr>
+                        <th className=''></th>
                         <th>Name</th>
-                        <th className='w-1/6'>£</th>
-                        <th className='w-1/6'>**</th>
+                        <th className=''>£</th>
+                        <th className=''>**</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,8 +57,18 @@ export default function PlayersTable (
                                 className='cursor-pointer border-gray-300'
                                 onClick={() => selectNewPlayerToSwap(player)}
                             >
+                                <td>
+                                    <PlayerDialog 
+                                        player={player} 
+                                        openDialog={
+                                            <div className='btn btn-circle shadow-none w-[15px] h-[15px]'>
+                                                +
+                                            </div>
+                                        }
+                                    />
+                                </td>
                                 <td>{player.web_name}</td>
-                                <td >{player.price}</td>
+                                <td >{player.now_cost}</td>
                                 <td >{player.total_points}</td>
                             </tr>
                         )

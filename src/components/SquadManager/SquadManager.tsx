@@ -4,7 +4,6 @@ import React from 'react'
 import Squad from './Squad'
 import PlayersTable from './PlayersTable'
 import { transferPlayer } from '@/lib/utils/utils'
-import { PlayerDialog } from '@/components/PlayerDialog/PlayerDialog'
 import { SquadType, Player, Team } from '@/types/types'
 
 interface PropTypes {
@@ -23,12 +22,11 @@ export default function SquadManager(
     const [newPlayer, setNewPlayer] = React.useState<Player | undefined>()
 
     function makeTransfer() {
-        const updatedSquad = transferPlayer(squadState, newPlayer, oldPlayer)
-        console.log(updatedSquad)
+        const updatedSquad = transferPlayer(squadState, teams, newPlayer, oldPlayer)
         if (updatedSquad) {
             setSquadState(updatedSquad)
         }
-        setOldPlayer(undefined)
+        setOldPlayer(undefined) 
         setNewPlayer(undefined)
     }
 
@@ -54,7 +52,6 @@ export default function SquadManager(
                     <button onClick={() => makeTransfer()} className="btn btn-neutral">
                         Transfer
                     </button>
-                    <PlayerDialog />
                     <Squad 
                         squadState={squadState} 
                         setSquadState={setSquadState} 

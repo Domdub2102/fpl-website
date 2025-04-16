@@ -2,7 +2,8 @@
 
 import React from "react"
 import { swapPlayers } from "@/lib/utils/utils"
-import { TestPlayerIcon } from "../PlayerIcon/TESTPlayerIcon"
+import { PlayerDialog } from "../PlayerDialog/PlayerDialog"
+import PlayerIcon from "../PlayerIcon/PlayerIcon"
 import { SquadType, Player } from "@/types/types"
 
 /**
@@ -67,9 +68,10 @@ export default function Squad({
             {[1, 2, 3, 4].map(position => (
                 <div key={position} className="flex flex-row gap-[10px]">
                     {squadState.firstEleven.filter(player => player.position === position).map(player => (
-                        <TestPlayerIcon 
+                        <PlayerDialog 
                             key={player.id}
                             player={player}
+                            openDialog={<PlayerIcon player={player}/>}
                         />
                     ))}
                 </div>
@@ -78,9 +80,12 @@ export default function Squad({
             {/* Render subs */}
             <div className="flex flex-row gap-[20px] mt-[50px]">
                 {squadState.subs.map(player => (
-                    <TestPlayerIcon 
+                    <PlayerDialog 
                         key={player.id}
                         player={player}
+                        openDialog={
+                            <PlayerIcon player={player}/>
+                        }
                     />
                 ))}
             </div>

@@ -27,10 +27,11 @@ export default async function PlayersPage() {
     }
   })
 
+  // fetch check
   console.log(updatedPlayers.slice(0,1))
 
   // create initial squad by passing in players array to createInitialSquad util function
-  const initialSquad = createInitialSquad(updatedPlayers)
+  const initialSquad = createInitialSquad(updatedPlayers, teams)
   const fullSquad = createFullSquad(initialSquad, 3, 4, 3)
 
   // sorts the players, initially by total points
