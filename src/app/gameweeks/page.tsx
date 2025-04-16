@@ -5,13 +5,20 @@ interface Gameweek {
 }
 
 async function fetchGameweeks() {
-    const res = await fetch("http://localhost:3000/api/gameweeks/", {
-        method: "GET",
-    })
-    if (!res.ok) {
-        throw new Error("Failed to fetch gameweek data")
+    try {
+        const res = await fetch("http://localhost:3000/api/gameweeks/", {
+            method: "GET",
+        })
+        if (!res.ok) {
+            throw new Error("Failed to fetch gameweek data")
+        }
+        const data = await res.json()
+        return data
+    } catch (error) {
+        console.error(error)
+        return []
     }
-    return res.json()
+    
 }
 
 export default async function Page() {

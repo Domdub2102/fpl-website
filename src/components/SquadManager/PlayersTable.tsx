@@ -5,7 +5,7 @@ import { Player } from '@/types/types'
 
 interface Props {
     players: Player[]
-    setNewPlayer: React.Dispatch<React.SetStateAction<Player| undefined>>
+    setNewPlayer: React.Dispatch<React.SetStateAction<Player | undefined>>
 }
 
 export default function PlayersTable (

@@ -8,15 +8,21 @@ interface Team {
 
 async function fetchTeams() {
     const url = "http://localhost:3000/api/teams/"
-    const res = await fetch(url, {
-        method: "GET",
-    })
-
-    if (!res) {
-        throw new Error("Failed to fetch teams")
+    try {
+        const res = await fetch(url, {
+            method: "GET",
+        })
+        if (!res) {
+            throw new Error("Failed to fetch teams")
+        }
+        const data = await res.json()
+        return data
     }
-    const data = res.json()
-    return data
+    catch (error) {
+        console.error(error)
+        return []
+    }
+    
 }
 
 export default async function TeamsPage() {

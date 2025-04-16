@@ -1,40 +1,52 @@
 import React from 'react'
-import { createInitialSquad, createFullSquad } from '@/utils/utils'
+import { createInitialSquad, createFullSquad } from '@/lib/utils'
 import SquadManager from '@/components/SquadManager/SquadManager'
 import { Player, Team } from '@/types/types'
 
 
 async function fetchTeams() {
   const url = "http://localhost:3000/api/teams/"
-  const res = await fetch(url, {
+  try {
+    const res = await fetch(url, {
       method: "GET",
-  })
+    })
 
-  if (!res) {
-      throw new Error("Failed to fetch teams")
+    if (!res) {
+        throw new Error("Failed to fetch teams")
+    }
+    const data = await res.json()
+    return data
   }
-  const data = await res.json()
-  return data
+  catch (error) {
+    console.error(error)
+    return []
+  }
 }
 
 
 async function fetchPlayers() {
   const url = `${process.env.NEXT_PUBLIC_SITE_URL}/api/players`
-  const res = await fetch(url, {
-      method: "GET"
-  })
-  if (!res.ok) {
-      throw new Error("Failed to fetch players from internal server")
+  try {
+    const res = await fetch(url, {
+        method: "GET"
+    })
+    if (!res.ok) {
+        throw new Error("Failed to fetch players from internal server")
+    }
+    const data = await res.json()
+    return data
   }
-  const data = await res.json()
-  return data
+  catch (error) {
+    console.error(error)
+    return []
+  }
 }
 
 export default async function PlayersPage() {
 
   // fetch teams/players and merge data
-  const teams = await fetchTeams()
-  const players = await fetchPlayers()
+  const teams: Team[] = await fetchTeams()
+  const players: Player[] = await fetchPlayers()
 
   const updatedPlayers = players.map((player: Player) => {
     const team = teams.find((team: Team) => team.id === player.team_id)

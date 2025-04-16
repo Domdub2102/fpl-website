@@ -3,7 +3,7 @@
 import React from 'react'
 import Squad from './Squad'
 import PlayersTable from './PlayersTable'
-import { transferPlayer } from '@/utils/utils'
+import { transferPlayer } from '@/lib/utils'
 import { PlayerDialog } from '@/components/PlayerDialog/PlayerDialog'
 import { SquadType, Player, Team } from '@/types/types'
 
@@ -19,8 +19,8 @@ export default function SquadManager(
     const [squadState, setSquadState] = React.useState(squad);
     const [selectedPlayers, setSelectedPlayers] = React.useState<Player[]>([]);
 
-    const [oldPlayer, setOldPlayer] = React.useState<Player>()
-    const [newPlayer, setNewPlayer] = React.useState<Player>()
+    const [oldPlayer, setOldPlayer] = React.useState<Player | undefined>()
+    const [newPlayer, setNewPlayer] = React.useState<Player | undefined>()
 
     function makeTransfer() {
         const updatedSquad = transferPlayer(squadState, newPlayer, oldPlayer)
