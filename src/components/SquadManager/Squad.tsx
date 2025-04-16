@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react"
-import { swapPlayers } from "@/lib/utils"
+import { swapPlayers } from "@/lib/utils/utils"
 import { TestPlayerIcon } from "../PlayerIcon/TESTPlayerIcon"
 import { SquadType, Player } from "@/types/types"
 

@@ -1,6 +1,5 @@
-// returns teams array with xg and xga data
+// returns teams array with team name and xg, xga data
 
-import { NextResponse } from "next/server";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
@@ -21,10 +20,10 @@ interface RawTeamData {
 }
 
 
-export async function GET() {
+export async function fetchXgData() {
     try {
-        const URL = "https://understat.com/league/epl";
-        const { data } = await axios.get(URL);
+        const url = "https://understat.com/league/epl";
+        const { data } = await axios.get(url);
         const $ = cheerio.load(data);
 
         // Extract script tag containing teamsData
@@ -37,8 +36,7 @@ export async function GET() {
         });
 
         if (!scriptText) {
-            console.error("❌ teamsData script not found.");
-            return NextResponse.json({ error: "Failed to find teamsData" }, { status: 500 });
+            throw new Error("teamsData script not found.");
         }
 
         // 🔹 Extract JSON-like part
@@ -78,10 +76,10 @@ export async function GET() {
           
             return updatedTeam;
         });
+        return updatedTeams
 
-        return NextResponse.json(updatedTeams, { status: 200 });
     } catch (error) {
-        console.error("❌ Error fetching data:", error);
-        return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
+        console.error("Error fetching data from Understat:", error);
+        return []
     }
 }

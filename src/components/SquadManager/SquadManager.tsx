@@ -3,7 +3,7 @@
 import React from 'react'
 import Squad from './Squad'
 import PlayersTable from './PlayersTable'
-import { transferPlayer } from '@/lib/utils'
+import { transferPlayer } from '@/lib/utils/utils'
 import { PlayerDialog } from '@/components/PlayerDialog/PlayerDialog'
 import { SquadType, Player, Team } from '@/types/types'
 

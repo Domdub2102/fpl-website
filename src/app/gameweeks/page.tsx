@@ -1,28 +1,13 @@
+import { fetchGameweeks } from "@/lib/fetchers/gameweeks"
+
 interface Gameweek {
     id: number
     name: string
     deadline: string
 }
 
-async function fetchGameweeks() {
-    try {
-        const res = await fetch("http://localhost:3000/api/gameweeks/", {
-            method: "GET",
-        })
-        if (!res.ok) {
-            throw new Error("Failed to fetch gameweek data")
-        }
-        const data = await res.json()
-        return data
-    } catch (error) {
-        console.error(error)
-        return []
-    }
-    
-}
-
 export default async function Page() {
-    const data = await fetchGameweeks()
+    const data: Gameweek[] = await fetchGameweeks()
     
     const gameweeks = data.map((gameweek: Gameweek) => {
         return (
