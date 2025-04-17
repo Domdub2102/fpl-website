@@ -63,128 +63,106 @@ export function createInitialSquad( players: Player[], teams: Team[] ) {
         break
     }
   }
-
   return squad.sort((a, b) => a.position - b.position)
 }
 
+
+
 // takes position states to set the formation
 export function createFullSquad( 
-  squad: Player[], 
-  defenders:number, 
-  midfielders:number, 
-  attackers:number 
+    squad: Player[], 
+    defenders:number, 
+    midfielders:number, 
+    attackers:number 
 ) {
-  const squadDict: Record<Position, {count: number, limit: number}> = {
-      1: { count: 0, limit: 1 },
-      2: { count: 0, limit: defenders},
-      3: { count: 0, limit: midfielders },
-      4: { count: 0, limit: attackers }
-  }
-  const fullSquad: SquadType = {
-      firstEleven: [],
-      subs: []
-  }
-  for (const player of squad) {
-    const position = player.position as Position
-    if (squadDict[position].count < squadDict[position].limit) {
-        fullSquad.firstEleven.push(player)
-        squadDict[position].count++
-    } else {
-        fullSquad.subs.push(player)
+    const squadDict: Record<Position, {count: number, limit: number}> = {
+        1: { count: 0, limit: 1 },
+        2: { count: 0, limit: defenders},
+        3: { count: 0, limit: midfielders },
+        4: { count: 0, limit: attackers }
     }
-  }
-  return fullSquad
+    const fullSquad: SquadType = {
+        firstEleven: [],
+        subs: []
+    }
+    for (const player of squad) {
+        const position = player.position as Position
+        if (squadDict[position].count < squadDict[position].limit) {
+            player.inFirstEleven = true
+            fullSquad.firstEleven.push(player)
+            squadDict[position].count++
+        } else {
+            player.inSubs = true
+            fullSquad.subs.push(player)
+        }
+    }
+    return fullSquad
 }
 
+
+
 // Swapping players between firstEleven and subs
-export function swapPlayers(selectedPlayers: Player[], squadState: SquadType) {
-  if (selectedPlayers.length !== 2) {
-      console.log("Please select exactly two players to swap.")
-      return null
-  }
+export function swapPlayers(startingPlayer: Player, subPlayer: Player, squad: SquadType) {
+    if (!startingPlayer || !subPlayer) {
+        console.log("Please select exactly two players to swap.")
+        return null
+    }
 
-  const [player1, player2] = selectedPlayers;
+    //each player has a position property equal to 1, 2, 3, or 4
+    const positions: Record<Position, {current: number, min: number, max: number}> = {
+        1: {current: 0, min: 1, max: 1},
+        2: {current: 0, min: 3, max: 5},
+        3: {current: 0, min: 2, max: 5},
+        4: {current: 0, min: 1, max: 3}
+    }
+    // finds current 'formation' of the squad by updating positions dictionary
+    squad.firstEleven.forEach(player => {
+        positions[player.position as Position].current++
+    })
 
-  // find if both players are in firsteleven or subs:
-  const bothFirstEleven = squadState.firstEleven.filter(player => player.id === player1.id || player.id === player2.id)
-  const bothSubs = squadState.subs.filter(player => player.id === player1.id || player.id === player2.id)
+    // prevents invalid formations using positions lookup dictionary
+    if (startingPlayer.position !== subPlayer.position) {
+        const startingPosition = positions[startingPlayer.position as Position]
+        const subPosition = positions[subPlayer.position as Position]
+        if (subPosition.current === subPosition.max) {
+            console.log("invalid formation")
+            return
+        }
+        if (startingPosition.current === startingPosition.min) {
+            console.log("Invalid Formation")
+            return
+        }
+    }
 
-  if (bothFirstEleven.length > 1 || bothSubs.length > 1) {
-      console.log("Make sure you are swapping players between the first XI and subs bench")
-      return null
-  }
+    subPlayer.inSubs = false
+    subPlayer.inFirstEleven = true
+    subPlayer.isSelected = false
+    startingPlayer.inSubs = true
+    startingPlayer.inFirstEleven = false
+    startingPlayer.isSelected = false
 
-  const positions: Record<Position, {current: number, min: number, max: number}> = {
-      1: {current: 0, min: 1, max: 1},
-      2: {current: 0, min: 3, max: 5},
-      3: {current: 0, min: 2, max: 5},
-      4: {current: 0, min: 1, max: 3}
-  }
-  // updates the 'formation' of the squad
-  squadState.firstEleven.forEach(player => {
-      positions[player.position as Position].current++
-  })
+    const startingIndex = squad.firstEleven.findIndex(player => player.id === startingPlayer.id)
+    const subIndex = squad.subs.findIndex(player => player.id === subPlayer.id)
 
+    // Swap in firstEleven at the correct index
+    const updatedFirstEleven = [
+        ...squad.firstEleven.slice(0, startingIndex),
+        subPlayer,
+        ...squad.firstEleven.slice(startingIndex + 1)
+    ];
 
-  if (player1.position !== player2.position) {
-      if (squadState.firstEleven.find(player => player.id === player1.id)) {
-          if (positions[player2.position as Position].current + 1 > positions[player2.position as Position].max) {
-              console.log("Invalid Formation")
-              return null
-          } 
-          if (positions[player1.position as Position].current - 1 < positions[player1.position as Position].min) {
-              console.log("Invalid formation") 
-              return null
-          }
-      } else {
-          if (positions[player1.position as Position].current + 1 > positions[player1.position as Position].max) {
-              console.log("Invalid Formation")
-              return null
-          } 
-          if (positions[player2.position as Position].current - 1 < positions[player2.position as Position].min) {
-              console.log("Invalid formation") 
-              return null
-          }
-      }
-  }
+    // Swap in subs at the correct index
+    const updatedSubs = [
+        ...squad.subs.slice(0, subIndex),
+        startingPlayer,
+        ...squad.subs.slice(subIndex + 1)
+    ]
 
-  let firstElevenPlayer = squadState.firstEleven.find(player => player.id === player1.id);
-  let subPlayer;
-  let firstElevenIndex, subIndex;
-
-  if (firstElevenPlayer) {
-      // Player1 is in firstEleven, Player2 is in subs
-      subPlayer = player2;
-      firstElevenIndex = squadState.firstEleven.findIndex(player => player.id === player1.id);
-      subIndex = squadState.subs.findIndex(player => player.id === player2.id);
-  } else {
-      // Player1 is in subs, Player2 is in firstEleven
-      firstElevenPlayer = player2;
-      subPlayer = player1;
-      firstElevenIndex = squadState.firstEleven.findIndex(player => player.id === player2.id);
-      subIndex = squadState.subs.findIndex(player => player.id === player1.id);
-  }
-
-  // Swap in firstEleven at the correct index
-  const updatedFirstEleven = [
-      ...squadState.firstEleven.slice(0, firstElevenIndex),
-      subPlayer,
-      ...squadState.firstEleven.slice(firstElevenIndex + 1)
-  ];
-
-  // Swap in subs at the correct index
-  // ** possibly dont order the subs, just always put keeper at index[0] **
-  const updatedSubs = [
-      ...squadState.subs.slice(0, subIndex),
-      firstElevenPlayer,
-      ...squadState.subs.slice(subIndex + 1)
-  ].sort((a, b) => a.position - b.position);
-
-  const updatedSquad = {
-      firstEleven: updatedFirstEleven,
-      subs: updatedSubs
-  }
-  return updatedSquad
+    const updatedSquad = {
+        firstEleven: updatedFirstEleven,
+        subs: updatedSubs
+    }
+    return updatedSquad
 }
 
 
@@ -221,7 +199,7 @@ export function transferPlayer(currentSquad: SquadType, teams: Team[], newPlayer
     // stops transfer of player in different position
     if (oldPlayer.position !== newPlayer.position) {
         console.log("Cannot transfer players of different positions")
-        return null
+        return 
     }
 
     // *** can combine this with findIndex a few lines down to reduce need to search arrays again ***
@@ -230,7 +208,7 @@ export function transferPlayer(currentSquad: SquadType, teams: Team[], newPlayer
         currentSquad.subs.find(player => player.id === oldPlayer.id)
     ) {
         console.log("Player already in squad")
-        return null
+        return 
     }
 
     const updatedSquad: SquadType = {
@@ -258,13 +236,13 @@ export function transferPlayer(currentSquad: SquadType, teams: Team[], newPlayer
     } 
     else {
         console.log("must swap players from in and out of the squad")
-        return null
+        return 
     }
     // checks if squad array has been filled before returning
     if (updatedSquad.firstEleven.length > 0 && updatedSquad.subs.length > 0) {
         return updatedSquad
     } 
     else {
-        return undefined
+        return 
     }
 }

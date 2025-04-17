@@ -26,6 +26,9 @@ export async function fetchPlayers() {
                 position: player.element_type,
                 selected_by_percent: player.selected_by_percent,
                 team_id: player.team,
+                inFirstEleven: false,
+                inSubs: false,
+                isSelected: false,
             }))
             
         return players

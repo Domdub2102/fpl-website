@@ -3,11 +3,16 @@ import Image from 'next/image'
 
 import { Player } from '@/types/types'
 
-
 export default function PlayerIcon ({ player }: {player: Player}) {
+
+  console.log(player.isSelected)
+
+  const isSelected = player.isSelected
+  const borderColor = isSelected ? 'border-green-300' : 'border-transparent'
+
   const fixture = `${player.fixtures[32].opponent_short} (${player.fixtures[32].home_away})`
   return (
-    <div className='relative flex flex-col items-center text-center border-2 border-transparent rounded-md cursor-pointer hover:border-white'>
+    <div className={`relative flex flex-col items-center text-center border-2 ${borderColor} rounded-md cursor-pointer hover:border-white`}>
         <div className='w-[90px]'>
             <Image 
                 src={`/KitIcons/${player.team_name} Front.png`}

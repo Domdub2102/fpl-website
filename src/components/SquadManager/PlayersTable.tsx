@@ -4,13 +4,13 @@ import React from 'react'
 import { Player } from '@/types/types'
 import { PlayerDialog } from '../PlayerDialog/PlayerDialog'
 
+
 interface Props {
     players: Player[]
-    setNewPlayer: React.Dispatch<React.SetStateAction<Player | undefined>>
 }
 
 export default function PlayersTable (
-    { players, setNewPlayer}: Props
+    { players }: Props
 ) { 
 
     const [currentPage, setCurrentPage] = React.useState(1)
@@ -33,10 +33,6 @@ export default function PlayersTable (
         }
     }
 
-    function selectNewPlayerToSwap(player: Player) {
-        setNewPlayer(player)
-    }
-
     return (
         <div>
             <table className='table'>
@@ -54,8 +50,6 @@ export default function PlayersTable (
                             // need to add an onclick function here to select a player 
                             <tr 
                                 key={player.id} 
-                                className='cursor-pointer border-gray-300'
-                                onClick={() => selectNewPlayerToSwap(player)}
                             >
                                 <td>
                                     <PlayerDialog 

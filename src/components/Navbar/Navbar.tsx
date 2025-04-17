@@ -11,10 +11,9 @@ const Navbar = () => {
         <NavbarLogo>FPLibre</NavbarLogo>
         <div className=''>
           <NavbarLink href="/gameweeks">Gameweeks</NavbarLink>
-          <NavbarLink href="/players">Players</NavbarLink>
+          <NavbarLink href="/squad">Squad</NavbarLink>
           <NavbarLink href="/teams">Teams</NavbarLink>
           <NavbarLink href="/login">Login</NavbarLink>
-          <NavbarLink href="/test">Test</NavbarLink>
         </div>
     </div>
   )
