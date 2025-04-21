@@ -99,13 +99,29 @@ export function createFullSquad(
     return fullSquad
 }
 
+export function unselectPlayers(squad: SquadType) {
+    const updatedFirstEleven = squad.firstEleven.map((player: Player)=> ({
+        ...player,
+        isSelected: false
+    }))
+    const updatedSubs = squad.subs.map((player: Player) => ({
+        ...player,
+        isSelected: false
+    }))
+    const updatedSquad = {
+        firstEleven: updatedFirstEleven,
+        subs: updatedSubs
+    }
+    return updatedSquad
+}
 
 
 // Swapping players between firstEleven and subs
 export function swapPlayers(startingPlayer: Player, subPlayer: Player, squad: SquadType) {
     if (!startingPlayer || !subPlayer) {
         console.log("Please select exactly two players to swap.")
-        return null
+        const updatedSquad = unselectPlayers(squad)
+        return updatedSquad
     }
 
     //each player has a position property equal to 1, 2, 3, or 4
@@ -126,11 +142,13 @@ export function swapPlayers(startingPlayer: Player, subPlayer: Player, squad: Sq
         const subPosition = positions[subPlayer.position as Position]
         if (subPosition.current === subPosition.max) {
             console.log("invalid formation")
-            return
+            const updatedSquad = unselectPlayers(squad)
+            return updatedSquad
         }
         if (startingPosition.current === startingPosition.min) {
             console.log("Invalid Formation")
-            return
+            const updatedSquad = unselectPlayers(squad)
+            return updatedSquad
         }
     }
 

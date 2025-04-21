@@ -44,11 +44,16 @@ export default async function SquadPage() {
     );
 
     return (
-        <div className='flex flex-row'>
-            <SquadProvider>
-                <Squad initialSquad={fullSquad}/>
-                <PlayerSelector players={sortedPlayers} teams={teams}/>
-            </SquadProvider>
+        <div className='flex flex-col items-center w-full bg-[#2a272a]'>
+            <div className='bg-[#c0fcf7] w-full text-center py-[20px]'>
+                <h1 className='text-[40px] text-black font-[800]'>Squad Planner</h1>
+            </div>
+            <div className='flex flex-row justify-center w-full'>
+                <SquadProvider>
+                    <Squad initialSquad={fullSquad}/>
+                    <PlayerSelector players={sortedPlayers} teams={teams}/>
+                </SquadProvider>
+            </div>
         </div>
     )
 }

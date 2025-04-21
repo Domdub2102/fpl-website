@@ -22,39 +22,41 @@ export default function PlayerSelector({
         priceOptions.unshift(i)
     }
     return (
-        <div className='flex flex-col basis-1/3 p-[10px] bg-teal-200 shadow-lg'>
-            <h3 className='text-[30px] font-[800] mb-[20px]'>Player Selection</h3>
-            <label htmlFor='players' className='font-[600]'>View</label>
-            <select name="players" id="players" className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'>
-                <optgroup label='Global'>
-                    <option>All Players</option>
-                </optgroup>
-                <optgroup label='By Position'>
-                    <option>Goalkeepers</option>
-                    <option>Defenders</option>
-                    <option>Midfielders</option>
-                    <option>Attackers</option>
-                </optgroup>
-                <optgroup label='By Team'>
-                    {teams.map((team: Team) => <option key={team.name}>{team.name}</option>)}
-                </optgroup>
-            </select>
-            <label htmlFor='sort' className='font-[600]'>Sort</label>
-            <select name="sort" id="sort" className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'>
-                <option>Total Points</option>
-                <option>Price</option>
-                <option>xG</option>
-                <option>xA</option>
-            </select>
-            <label htmlFor='maxPrice' className='font-[600]'>Max. Price</label>
-            <select name="maxPrice" id="maxPrice" className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'>
-                {priceOptions.map(value => <option key={value} value={value}>{value}</option>)}
-            </select>
-            <label htmlFor="player-search" className='font-[600]'>Search Player</label>
-            <input id="player-search" placeholder='Player Search' className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'></input>
-            <PlayersTable 
-                players={players}
-            />
+        <div className="pr-[20px] w-1/3 bg-[#c0fcf7]">
+            <div className='flex flex-col basis-1/3 p-[10px] bg-teal-200 shadow-lg'>
+                <h3 className='text-[30px] font-[800] mb-[20px]'>Player Selection</h3>
+                <label htmlFor='players' className='font-[600]'>View</label>
+                <select name="players" id="players" className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'>
+                    <optgroup label='Global'>
+                        <option>All Players</option>
+                    </optgroup>
+                    <optgroup label='By Position'>
+                        <option>Goalkeepers</option>
+                        <option>Defenders</option>
+                        <option>Midfielders</option>
+                        <option>Attackers</option>
+                    </optgroup>
+                    <optgroup label='By Team'>
+                        {teams.map((team: Team) => <option key={team.name}>{team.name}</option>)}
+                    </optgroup>
+                </select>
+                <label htmlFor='sort' className='font-[600]'>Sort</label>
+                <select name="sort" id="sort" className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'>
+                    <option>Total Points</option>
+                    <option>Price</option>
+                    <option>xG</option>
+                    <option>xA</option>
+                </select>
+                <label htmlFor='maxPrice' className='font-[600]'>Max. Price</label>
+                <select name="maxPrice" id="maxPrice" className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'>
+                    {priceOptions.map(value => <option key={value} value={value}>{value}</option>)}
+                </select>
+                <label htmlFor="player-search" className='font-[600]'>Search Player</label>
+                <input id="player-search" placeholder='Player Search' className='bg-teal-100 mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'></input>
+                <PlayersTable 
+                    players={players}
+                />
+            </div>
         </div>
     )
 }
