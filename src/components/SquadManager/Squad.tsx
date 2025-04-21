@@ -33,7 +33,7 @@ export default function Squad({ initialSquad }: { initialSquad: SquadType }) {
 
     return (
         <div className='flex flex-col w-2/3 box-border'>
-            <div className='flex flex-col basis-2/3 p-[10px] bg-[#c0fcf7] shadow-lg justify-start items-center pl-[20px] pb-[100px]'>
+            <div className='flex flex-col basis-2/3 p-[10px] bg-[#c0fcf7] shadow-lg justify-start items-center pl-[100px] pb-[100px]'>
                 <div className='flex flex-row justify-around w-[80%] items-center my-[10px]'>
                     <button className='btn'>Previous</button>
                     <span className='font-[600] text-[20px]'>GW1</span>

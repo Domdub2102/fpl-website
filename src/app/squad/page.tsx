@@ -51,7 +51,7 @@ export default async function SquadPage() {
             <div className='flex flex-row justify-center w-full'>
                 <SquadProvider>
                     <Squad initialSquad={fullSquad}/>
-                    <PlayerSelector players={sortedPlayers} teams={teams}/>
+                    <PlayerSelector initialPlayers={sortedPlayers} teams={teams}/>
                 </SquadProvider>
             </div>
         </div>

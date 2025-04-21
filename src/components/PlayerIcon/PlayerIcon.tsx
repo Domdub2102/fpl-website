@@ -5,8 +5,6 @@ import { Player } from '@/types/types'
 
 export default function PlayerIcon ({ player }: {player: Player}) {
 
-  console.log(player.isSelected)
-
   const isSelected = player.isSelected
   const borderColor = isSelected ? 'border-green-300' : 'border-transparent'
 

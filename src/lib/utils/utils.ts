@@ -264,3 +264,31 @@ export function transferPlayer(currentSquad: SquadType, teams: Team[], newPlayer
         return 
     }
 }
+
+export function filterPlayers(view: string, sort: string, maxPrice: number, initialPlayers: Player[]) {
+    let updatedPlayers 
+    let sortedPlayers
+    if (view === "All Players") {
+        updatedPlayers = initialPlayers.filter(player => player.now_cost <= maxPrice)
+    } else if (view === "Goalkeepers") {
+        updatedPlayers = initialPlayers.filter(player => player.position === 1 && player.now_cost <= maxPrice)
+    } else if (view === "Defenders") {
+        updatedPlayers = initialPlayers.filter(player => player.position === 2 && player.now_cost <= maxPrice)
+    } else if (view === "Midfielders") {
+        updatedPlayers = initialPlayers.filter(player => player.position === 3 && player.now_cost <= maxPrice)
+    } else if (view === "Attackers") {
+        updatedPlayers = initialPlayers.filter(player => player.position === 4 && player.now_cost <= maxPrice)
+    } else {
+        updatedPlayers = initialPlayers.filter(player => player.team_name === view && player.now_cost <= maxPrice)
+    }
+    if (sort === "Total Points") {
+        sortedPlayers = updatedPlayers?.toSorted(
+            (player1, player2) => player2.total_points - player1.total_points
+        )
+    } else if (sort === "Price"){
+        sortedPlayers = updatedPlayers?.toSorted(
+            (player1, player2) => player2.now_cost - player1.now_cost
+        )
+    }
+    return sortedPlayers
+}

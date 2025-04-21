@@ -1,17 +1,13 @@
 'use client'
 
 import React from 'react'
-import { Player } from '@/types/types'
 import { PlayerDialog } from '../PlayerDialog/PlayerDialog'
+import { useSquad } from '@/lib/context/SquadContext'
 
 
-interface Props {
-    players: Player[]
-}
+export default function PlayersTable () { 
 
-export default function PlayersTable (
-    { players }: Props
-) { 
+    const { players } = useSquad()
 
     const [currentPage, setCurrentPage] = React.useState(1)
     const pageSize = 10
