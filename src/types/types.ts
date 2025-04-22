@@ -22,6 +22,7 @@ export interface Player {
     first_name: string
     second_name: string
     total_points: number
+    can_select: boolean
     expected_goals: string
     expected_assists: string
     minutes: number 

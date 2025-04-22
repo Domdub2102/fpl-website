@@ -187,6 +187,11 @@ export function swapPlayers(startingPlayer: Player, subPlayer: Player, squad: Sq
 
 export function transferPlayer(currentSquad: SquadType, teams: Team[], newPlayer: Player | undefined, oldPlayer: Player | undefined) {
 
+    if (!newPlayer || !oldPlayer) {
+        console.log("Please select two players")
+        return currentSquad
+    }
+
     // create a lookup dict of teams in current squad
     const teamDict: Record<number, { count: number, limit: number }> = {}
     teams.forEach(team => {
@@ -199,69 +204,71 @@ export function transferPlayer(currentSquad: SquadType, teams: Team[], newPlayer
         teamDict[player.team_id].count++
     })
 
-    if (!newPlayer || !oldPlayer) {
-        console.log("Please select two players")
-        return
-    }
-
     // ensures that new player doesnt increase a single teams no. of players past 3
     if (newPlayer.team_id !== oldPlayer.team_id) {
         const currentTeamCount = teamDict[newPlayer.team_id].count
         const currentTeamLimit = teamDict[newPlayer.team_id].limit
         if (currentTeamCount === currentTeamLimit) {
             console.log("Maximum of 3 players per team")
-            return
+            return currentSquad
         } 
     }
 
     // stops transfer of player in different position
     if (oldPlayer.position !== newPlayer.position) {
         console.log("Cannot transfer players of different positions")
-        return 
+        return currentSquad
     }
 
-    // *** can combine this with findIndex a few lines down to reduce need to search arrays again ***
+    // checks if player trying to transfer in is already in the squad
     if (
         currentSquad.firstEleven.find(player => player.id === newPlayer.id) ||
-        currentSquad.subs.find(player => player.id === oldPlayer.id)
+        currentSquad.subs.find(player => player.id === newPlayer.id)
     ) {
         console.log("Player already in squad")
-        return 
+        return currentSquad
     }
 
-    const updatedSquad: SquadType = {
-        firstEleven: [],
-        subs: []
-    }
-
-    // *** update here to add the transferred player at the correct squad index ***
     const firstElevenIndex = currentSquad.firstEleven.findIndex(player => player.id === oldPlayer.id)
+    const subIndex = currentSquad.subs.findIndex(player => player.id === oldPlayer.id)
+
+    let updatedSquad
     // if the oldplayer is in the first eleven
-    if (firstElevenIndex) {
-        const newFirstEleven = currentSquad.firstEleven
-            .filter(player => player.id !== oldPlayer.id)
-        
-        updatedSquad.firstEleven = [...newFirstEleven, newPlayer]
-        updatedSquad.subs = [...currentSquad.subs]
+    if (firstElevenIndex !== -1) {
+        // use .slice to remove old player and replace with new player
+        const updatedFirstEleven = [
+            ...currentSquad.firstEleven.slice(0, firstElevenIndex),
+            {...newPlayer, inFirstEleven: true},
+            ...currentSquad.firstEleven.slice(firstElevenIndex + 1)
+        ]
+        updatedSquad = {
+            firstEleven: updatedFirstEleven,
+            subs: currentSquad.subs
+        }
     }
     // if oldPlayer in subs
-    else if (currentSquad.subs.find(player => player.id === oldPlayer.id)) {
-        const newSubs = currentSquad.subs
-            .filter(player => player.id !== oldPlayer.id)
-        
-        updatedSquad.subs = [...newSubs, newPlayer]
-        updatedSquad.firstEleven = [...currentSquad.firstEleven]
+    else if (subIndex !== -1) {
+        const updatedSubs = [
+            ...currentSquad.subs.slice(0, subIndex),
+            {...newPlayer, inSubs: true},
+            ...currentSquad.subs.slice(subIndex + 1)
+        ]
+        updatedSquad = {
+            firstEleven: currentSquad.firstEleven,
+            subs: updatedSubs
+        }
     } 
     else {
         console.log("must swap players from in and out of the squad")
-        return 
+        return currentSquad
     }
+
     // checks if squad array has been filled before returning
     if (updatedSquad.firstEleven.length > 0 && updatedSquad.subs.length > 0) {
         return updatedSquad
     } 
     else {
-        return 
+        return currentSquad
     }
 }
 

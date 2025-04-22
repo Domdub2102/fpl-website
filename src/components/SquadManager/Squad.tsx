@@ -1,14 +1,17 @@
 'use client'
 
 import React from "react"
-import { swapPlayers } from "@/lib/utils/utils"
+import { swapPlayers, transferPlayer } from "@/lib/utils/utils"
 import { PlayerDialog } from "../PlayerDialog/PlayerDialog"
 import PlayerIcon from "../PlayerIcon/PlayerIcon"
-import { SquadType } from "@/types/types"
+import { SquadType, Team } from "@/types/types"
 import { useSquad } from "@/lib/context/SquadContext"
 
 
-export default function Squad({ initialSquad }: { initialSquad: SquadType }) {
+export default function Squad(
+    { initialSquad, teams }: 
+    { initialSquad: SquadType, teams: Team[] }
+) {
     const { 
         currentSquad, 
         setCurrentSquad, 
@@ -16,6 +19,10 @@ export default function Squad({ initialSquad }: { initialSquad: SquadType }) {
         setStartingPlayer,
         subPlayer, 
         setSubPlayer, 
+        transferIn,
+        setTransferIn,
+        transferOut,
+        setTransferOut,
     } = useSquad()
 
     React.useEffect(() => {
@@ -30,6 +37,19 @@ export default function Squad({ initialSquad }: { initialSquad: SquadType }) {
             setSubPlayer(undefined)
         }
     }, [startingPlayer, subPlayer])
+
+    React.useEffect(() => {
+        if (transferIn && transferOut) {
+            console.log(`${transferIn.web_name}, ${transferOut.web_name}`)
+            const updatedSquad = transferPlayer(currentSquad, teams, transferIn, transferOut)
+            setCurrentSquad(updatedSquad)
+            setTransferIn(undefined)
+            setTransferOut(undefined)
+        }
+    }, [transferIn, transferOut])
+
+    console.log(`${startingPlayer}, ${subPlayer}`)
+
 
     return (
         <div className='flex flex-col w-2/3 box-border'>

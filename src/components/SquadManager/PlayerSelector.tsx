@@ -47,12 +47,6 @@ export default function PlayerSelector({
         }
     }, [view, sort, maxPrice])
 
-    /*
-    React.useEffect(() => {
-        const updatedPlayers = players.filter(player => player.now_cost < maxPrice)
-        setPlayers(updatedPlayers)
-    }, [maxPrice, view, sort]) */
-
 
     const priceOptions = []
     for (let i = 3.8; i < 15.0; i+=0.5) {

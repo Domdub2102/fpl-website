@@ -1,0 +1,19 @@
+Bug Fixes:
+- number of pages glitch: when a team is selected and user on high page(eg. 10),
+    the page doesnt reset back to 1
+- player icons don't display both teams in a double GW
+- transferred players can't be subbed
+
+UI Fixes:
+- Subs bench
+- 'selected' player in squad/table for transfers
+- Grey out players that you cannot swap/transfer
+- More detail in the player table:
+    - kit icon (sm), name-bold, team, position 
+    - general UI improvements
+
+To Do:
+- Player search functionality
+- gameweek switching:
+    - need a gameweek state which tracks the current GW based on datetime (now)
+    - gameweek state sets the fixtures displayed in the player icons

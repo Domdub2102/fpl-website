@@ -19,7 +19,9 @@ type Props = {
 
 export function PlayerDialog({ player, openDialog }: Props) {
 
-    const { setStartingPlayer, setSubPlayer, setCurrentSquad } = useSquad()
+    const { setStartingPlayer, setSubPlayer, currentSquad, setCurrentSquad, setTransferIn, setTransferOut } = useSquad()
+
+    const [open, setOpen] = React.useState(false)
 
     function handleSubClick(
         selectedPlayer: Player
@@ -44,12 +46,27 @@ export function PlayerDialog({ player, openDialog }: Props) {
                 subs: updatedSubs
             }
         })
+        setOpen(false)
     }
 
+    function handleTransferClick(selectedPlayer: Player) {
+        // need to set some isSelected UI
+        if (
+            currentSquad.firstEleven.find(player => player.id === selectedPlayer.id) 
+            || currentSquad.subs.find(player => player.id === selectedPlayer.id)
+        ) {
+            setTransferOut(selectedPlayer)
+        } 
+        else {
+            setTransferIn(selectedPlayer)
+        }
+        setOpen(false)
+    }
+ 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <button>{openDialog}</button>
+                <button onClick={() => setOpen(true)}>{openDialog}</button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[300px]">
                 <DialogHeader>
@@ -60,7 +77,7 @@ export function PlayerDialog({ player, openDialog }: Props) {
                       <button onClick={() => handleSubClick(player)} className='btn btn-neutral'>Substitute</button>
                     </div>
                     <div className="">
-                      <button className='btn btn-neutral'>Transfer</button>
+                      <button onClick={() => handleTransferClick(player)} className='btn btn-neutral'>Transfer</button>
                     </div>
                 </div>
             </DialogContent>
