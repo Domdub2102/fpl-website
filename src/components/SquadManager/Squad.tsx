@@ -103,7 +103,7 @@ export default function Squad(
 
     return (
         <div className='flex flex-col w-2/3 box-border'>
-            <div className='flex flex-col basis-2/3 p-[10px] bg-[#c0fcf7] justify-start items-center pl-[100px] pb-[100px]'>
+            <div className='flex flex-col basis-2/3 p-[10px] bg-teal-200 shadow-lg justify-start items-center pb-[100px]'>
                 <div className='flex flex-row justify-between w-full items-center my-[10px] px-[10px]'>
                     {/* onClick functions required */}
                     <button onClick={() => prevGameweek(gameweek)} className='btn w-[100px]'>Previous</button>
@@ -117,12 +117,12 @@ export default function Squad(
                     <span>Squad Value: £{squadValue}</span>
                 </div>
                 <div
-                    className="w-full h-[800px] bg-cover bg-center flex flex-col items-center gap-[10px]"
+                    className="w-full h-[868px] bg-cover bg-center flex flex-col items-center gap-5"
                     style={{ backgroundImage: "url(/pitch3.svg)" }}
                 >
                     {/* Render firstEleven players by position */}
                     {[1, 2, 3, 4].map(position => (
-                        <div key={position} className="flex flex-row gap-[30px]">
+                        <div key={position} className="flex flex-row gap-[20px]">
                             {currentSquad.firstEleven.filter(player => player.position === position).map(player => (
                                 <PlayerDialog 
                                     key={player.id}
@@ -137,16 +137,19 @@ export default function Squad(
                     ))}
 
                     {/* Render subs */}
-                    <div className="flex flex-row gap-[20px] mt-[50px]">
-                        {currentSquad.subs.map(player => (
-                            <PlayerDialog 
-                                key={player.id}
-                                player={player}
-                                openDialog={
-                                    <PlayerIcon player={player}/>
-                                }
-                            />
-                        ))}
+                    <div className="flex flex-col items-center bg-green-400 rounded p-4 mt-10 w-full">
+                        <div className="flex flex-row gap-[30px]">
+                            {currentSquad.subs.map(player => (
+                                <PlayerDialog 
+                                    key={player.id}
+                                    player={player}
+                                    openDialog={
+                                        <PlayerIcon player={player}/>
+                                    }
+                                />
+                            ))}
+                        </div>
+                        <h2 className="text-[18px] font-semibold mt-3">Substitutes</h2>
                     </div>
                 </div>
             </div>

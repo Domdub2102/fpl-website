@@ -85,7 +85,11 @@ export function PlayerDialog({ player, openDialog }: Props) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <button onClick={() => setOpen(true)}>{openDialog}</button>
+                <button 
+                    onClick={() => setOpen(true)}
+                >
+                    {openDialog}
+                </button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[300px]">
                 <DialogHeader>

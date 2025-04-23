@@ -44,8 +44,8 @@ export default async function SquadPage() {
     );
 
     return (
-        <div className='flex flex-col items-center w-full bg-[#c0fcf7]'>
-            <div className='bg-[#c0fcf7] w-full text-center py-[20px]'>
+        <div className='flex flex-col items-center w-full bg-[#c0fcf7] px-[100px] pb-10'>
+            <div className='bg-[#c0fcf7] w-full text-left py-[20px]'>
                 <h1 className='text-[40px] text-black font-[800]'>Squad Planner</h1>
             </div>
             <div className='flex flex-row justify-center w-full gap-[20px]'>

@@ -59,9 +59,9 @@ export default function PlayerSelector({
         priceOptions.unshift(i)
     }
     return (
-        <div className="pr-[100px] w-1/3 bg-[#c0fcf7]">
+        <div className="w-1/3 bg-[#c0fcf7]">
             <div className='flex flex-col basis-1/3 p-[10px] bg-teal-200 shadow-lg'>
-                <h3 className='text-[30px] font-[800] mb-[20px]'>Player Selection</h3>
+                <h3 className='text-[30px] font-[800] mb-[20px]'>Player Transfers</h3>
 
                 <label htmlFor='players' className='font-[600]'>View</label>
                 <select 

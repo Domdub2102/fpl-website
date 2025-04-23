@@ -26,9 +26,20 @@ export default function PlayerIcon ({ player }: {player: Player}) {
     fixture = `${currentFixtures[0].opponent_short} (${currentFixtures[0].home_away}), ${currentFixtures[1].opponent_short} (${currentFixtures[1].home_away})`
   }
 
+  const positionDict: { [key: number]: {position:string}} = {
+      1: {position: "GKP"},
+      2: {position: "DEF"},
+      3: {position: "MID"},
+      4: {position: "FWD"}
+  }
+
+  const subInfo = player.inSubs ? 
+      <div className='pb-1 font-semibold pl-0.5'>{positionDict[player.position].position}</div> : 
+      <div></div>
 
   return (
-    <div className={`relative flex flex-col items-center text-center border-2 ${borderColor} rounded-md cursor-pointer hover:border-white`}>
+    <div className={`relative flex flex-col items-center font-[500] text-center border-2 ${borderColor} rounded-md cursor-pointer hover:border-white`}>
+        {subInfo}
         <div className='w-[90px]'>
             <Image 
                 src={`/KitIcons/${player.team_name} Front.png`}
@@ -38,9 +49,9 @@ export default function PlayerIcon ({ player }: {player: Player}) {
                 className='w-full h-auto'
             />
         </div>
-        <div className='flex flex-col items-center w-[140px]'>
-            <span className="badge rounded-none w-full">{player.web_name}</span>
-            <span className="badge rounded-none bg-cyan-200 border-none text-black w-full">{fixture}</span>
+        <div className='flex flex-col items-center w-[125px]'>
+            <span className="badge rounded-none rounded-t-[4px] text-[15px] w-full py-4">{player.web_name}</span>
+            <span className="badge rounded-none rounded-b-[4px] bg-cyan-200 border-none text-black text-[13px] w-full font-medium">{fixture}</span>
         </div>
     </div>
   )

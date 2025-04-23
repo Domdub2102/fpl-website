@@ -3,8 +3,7 @@
 import React from 'react'
 import { PlayerDialog } from '../PlayerDialog/PlayerDialog'
 import { useSquad } from '@/lib/context/SquadContext'
-import Image from 'next/image'
-import { Player } from '@/types/types'
+import PlayerDetails from './PlayerDetails'
 
 
 export default function PlayersTable () { 
@@ -33,46 +32,16 @@ export default function PlayersTable () {
         }
     }
 
-    const positionDict: { [key: number]: {position:string}} = {
-        1: {position: "GKP"},
-        2: {position: "DEF"},
-        3: {position: "MID"},
-        4: {position: "FWD"}
-    }
-
-    const playerDetails = (player: Player) => {
-        const position = positionDict[player.position].position
-        return (
-            <td>
-                <div className='flex items-center gap-3'>
-                    <Image 
-                        src={`/KitIcons/${player.team_name} Front.png`}
-                        alt={`${player.team_name} Kit Icon`}
-                        width={50} 
-                        height={50}
-                        className="w-10 h-10 object-contain" // tailwind sizing
-                    />
-                    <div className='flex flex-col'>
-                        <p className='font-semibold text-[15px]'>{player.web_name}</p>
-                        <div className='flex flex-row gap-3 text-[13px]'>
-                            <p>{player.team_short_name}</p>
-                            <p>{position}</p>
-                        </div>
-                    </div>
-                </div>
-            </td>
-        )
-    }
 
     return (
         <div>
-            <table className='table'>
+            <table className='table table-compact w-full'>
                 <thead className='text-black'>
-                    <tr>
-                        <th className=''></th>
-                        <th></th>
-                        <th className=''>£</th>
-                        <th className=''>**</th>
+                    <tr className='p-0 m-0'>
+                        <th className='w-1/8 p-0 pl-5'></th>
+                        <th className='p-0 pl-5'></th>
+                        <th className='w-1/8 p-0 pl-5'>£</th>
+                        <th className='w-1/8 p-0 pl-5'>**</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,14 +56,14 @@ export default function PlayersTable () {
                                     <PlayerDialog 
                                         player={player} 
                                         openDialog={
-                                            <div className='btn btn-circle shadow-none w-[15px] h-[15px]'>
+                                            <div className='btn btn-circle shadow-none w-[15px] h-[15px] m-0 p-1'>
                                                 +
                                             </div>
                                         }
                                     />
                                 </td>
-                                {playerDetails(player)}
-                                <td >{player.now_cost}</td>
+                                <PlayerDetails player={player} />
+                                <td >{player.now_cost.toFixed(1)}</td>
                                 <td >{player.total_points}</td>
                             </tr>
                         )
