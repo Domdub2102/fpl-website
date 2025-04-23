@@ -63,7 +63,7 @@ export function createInitialSquad( players: Player[], teams: Team[] ) {
         break
     }
   }
-  return squad.sort((a, b) => a.position - b.position)
+  return squad
 }
 
 

@@ -1,12 +1,12 @@
 Bug Fixes:
 - number of pages glitch: when a team is selected and user on high page(eg. 10),
     the page doesnt reset back to 1
-- player icons don't display both teams in a double GW
-- transferred players can't be subbed
+- isSelected -> isSelected doesnt get removed if sub/transfer players fails
+
 
 UI Fixes:
 - Subs bench
-- 'selected' player in squad/table for transfers
+- 'selected' player in table for transfers
 - Grey out players that you cannot swap/transfer
 - More detail in the player table:
     - kit icon (sm), name-bold, team, position 
@@ -14,6 +14,9 @@ UI Fixes:
 
 To Do:
 - Player search functionality
-- gameweek switching:
-    - need a gameweek state which tracks the current GW based on datetime (now)
-    - gameweek state sets the fixtures displayed in the player icons
+- Transfers:
+    - Remove transfers for now?
+    - Other option is add 'Create (set) Initial Squad' button, which stores users team as the base, then counts transfers from there
+    - Need to use caching (local storage) to set the value of the squad
+- Change Budget to Squad Value:
+    - use now_cost property to calculate total value

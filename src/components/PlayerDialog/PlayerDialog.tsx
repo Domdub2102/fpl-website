@@ -50,16 +50,35 @@ export function PlayerDialog({ player, openDialog }: Props) {
     }
 
     function handleTransferClick(selectedPlayer: Player) {
-        // need to set some isSelected UI
-        if (
-            currentSquad.firstEleven.find(player => player.id === selectedPlayer.id) 
-            || currentSquad.subs.find(player => player.id === selectedPlayer.id)
-        ) {
+
+        const playerInFirstEleven = currentSquad.firstEleven.find(player => player.id === selectedPlayer.id)
+        const playerInSubs = currentSquad.subs.find(player => player.id === selectedPlayer.id)
+        
+        if (playerInFirstEleven || playerInSubs) {
+            console.log("player found")
+            setCurrentSquad(prevSquad => {
+                const updatedFirstEleven = prevSquad.firstEleven.map(player => 
+                    player.id === selectedPlayer.id ? 
+                    {...player, isSelected: true} : 
+                    player
+                )
+                const updatedSubs = prevSquad.subs.map(player => 
+                    player.id === selectedPlayer.id ? 
+                    {...player, isSelected: true} : 
+                    player
+                )
+                return {
+                    ...prevSquad,
+                    firstEleven: updatedFirstEleven,
+                    subs: updatedSubs
+                }
+            })
             setTransferOut(selectedPlayer)
         } 
         else {
             setTransferIn(selectedPlayer)
         }
+
         setOpen(false)
     }
  

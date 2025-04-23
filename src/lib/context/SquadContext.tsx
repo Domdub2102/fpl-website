@@ -21,8 +21,10 @@ export default function SquadProvider({
 
     const [transferIn, setTransferIn] = React.useState<Player | undefined>()
     const [transferOut, setTransferOut] = React.useState<Player | undefined>()
+
+    const [gameweek, setGameweek] = React.useState({id: 1, name: "Gameweek 1", deadline_time: "2024-08-16T17:30:00Z"})
     
-    //define squadstates here?
+
     return (
         <SquadContext.Provider 
             value={{
@@ -37,7 +39,9 @@ export default function SquadProvider({
                 transferIn,
                 setTransferIn,
                 transferOut,
-                setTransferOut
+                setTransferOut,
+                gameweek,
+                setGameweek
             }}
         >
             {children}

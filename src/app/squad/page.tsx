@@ -1,11 +1,12 @@
 import React from 'react'
 import { createInitialSquad, createFullSquad } from '@/lib/utils/utils'
-import { Player, Team } from '@/types/types'
+import { Player, Team, Gameweek } from '@/types/types'
 import { fetchPlayers } from '@/lib/fetchers/players'
 import { fetchTeams } from '@/lib/fetchers/teams'
 import Squad from '@/components/SquadManager/Squad'
 import PlayerSelector from '@/components/SquadManager/PlayerSelector'
 import SquadProvider from '@/lib/context/SquadContext'
+import { fetchGameweeks } from '@/lib/fetchers/gameweeks'
 
 // fetch data here, then pass down as props to squad and player selector
 // squad/playerstable can then setState as they are client components 
@@ -15,6 +16,7 @@ export default async function SquadPage() {
     // fetch teams/players and merge data
     const teams: Team[] = await fetchTeams()
     const players: Player[] = await fetchPlayers()
+    const gameweeks: Gameweek[] = await fetchGameweeks()
 
     const updatedPlayers = players.map((player: Player) => {
         const team = teams.find((team: Team) => team.id === player.team_id)
@@ -30,9 +32,6 @@ export default async function SquadPage() {
             fixtures: team.fixtures
         }
     })
-
-    // fetch check
-    console.log(updatedPlayers.slice(0,1))
 
     // create initial squad by passing in players array to createInitialSquad util function
     const initialSquad = createInitialSquad(updatedPlayers, teams)
@@ -50,7 +49,7 @@ export default async function SquadPage() {
             </div>
             <div className='flex flex-row justify-center w-full'>
                 <SquadProvider>
-                    <Squad initialSquad={fullSquad} teams={teams}/>
+                    <Squad initialSquad={fullSquad} teams={teams} gameweeks={gameweeks}/>
                     <PlayerSelector initialPlayers={sortedPlayers} teams={teams}/>
                 </SquadProvider>
             </div>

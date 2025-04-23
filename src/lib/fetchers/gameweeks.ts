@@ -1,8 +1,4 @@
-type Gameweek = {
-    id: number
-    name: string
-    deadline_time: string
-}
+import { Gameweek } from "@/types/types"
 
 export async function fetchGameweeks() {
     const url = "https://fantasy.premierleague.com/api/events/"
@@ -18,7 +14,7 @@ export async function fetchGameweeks() {
             return {
                 id: gameweek.id,
                 name: gameweek.name,
-                deadline: gameweek.deadline_time,
+                deadline_time: gameweek.deadline_time
             }
         })
         return gameweeks

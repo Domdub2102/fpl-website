@@ -2,13 +2,30 @@ import React from 'react'
 import Image from 'next/image'
 
 import { Player } from '@/types/types'
+import { useSquad } from '@/lib/context/SquadContext'
 
-export default function PlayerIcon ({ player }: {player: Player}) {
+export default function PlayerIcon ({ player }: {player: Player}) {  
+  const { gameweek } = useSquad()
 
   const isSelected = player.isSelected
   const borderColor = isSelected ? 'border-green-300' : 'border-transparent'
 
-  const fixture = `${player.fixtures[32].opponent_short} (${player.fixtures[32].home_away})`
+  // use gameweek state to find all the fixtures with the selected gameweek
+  // we have access to the fixtures array of the player here
+  const currentFixtures = player.fixtures.filter(fixture => fixture.gameweek === gameweek.id)
+
+  let fixture
+  if (currentFixtures.length === 0) {
+    fixture = "-"
+  }
+  else if (currentFixtures.length === 1) {
+    fixture = `${currentFixtures[0].opponent_short} (${currentFixtures[0].home_away})`
+  }
+  else if (currentFixtures.length === 2) {
+    fixture = `${currentFixtures[0].opponent_short} (${currentFixtures[0].home_away}), ${currentFixtures[1].opponent_short} (${currentFixtures[1].home_away})`
+  }
+
+
   return (
     <div className={`relative flex flex-col items-center text-center border-2 ${borderColor} rounded-md cursor-pointer hover:border-white`}>
         <div className='w-[90px]'>

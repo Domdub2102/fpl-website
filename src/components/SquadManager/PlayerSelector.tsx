@@ -12,14 +12,6 @@ export default function PlayerSelector({
     initialPlayers: Player[], teams: Team[]
 }) {
 
-    /**
-     * TODO:
-     * All players selector should iterate the players array and only display those who fit the criteria
-     * Sort needs to sort the players by the criteria selected
-     * Max price needs to filter any players who are under the max price chosen
-     * Player search more complex
-     */
-
     const isFirstRender = React.useRef(true)
 
     const { setPlayers } = useSquad()
@@ -27,6 +19,7 @@ export default function PlayerSelector({
     const [view, setView] = React.useState("All Players")
     const [sort, setSort] = React.useState("Total Points")
     const [maxPrice, setMaxPrice] = React.useState(15.0)
+    const [searchInput, setSearchInput] = React.useState("")
 
     // sets the initial state of the players array
     React.useEffect(() => {
@@ -41,11 +34,20 @@ export default function PlayerSelector({
             return
         } else {
             const filteredPlayers = filterPlayers(view, sort, maxPrice, initialPlayers)
-            if (filteredPlayers) {
-                setPlayers(filteredPlayers)
+            const searchedPlayers = filteredPlayers?.filter(player => player.web_name.toLowerCase().includes(searchInput.toLowerCase()))
+            if (searchedPlayers) {
+                setPlayers(searchedPlayers)
             }
         }
-    }, [view, sort, maxPrice])
+    }, [view, sort, maxPrice, searchInput])
+
+    // filters the players based on the player search input 
+    React.useEffect(() => {
+        // first, add an onChange to the input, to set the searchInput state
+        // then, use the searchInput value to filter the players state
+        console.log(searchInput)
+        
+    }, [searchInput])
 
 
     const priceOptions = []
@@ -110,8 +112,12 @@ export default function PlayerSelector({
                 </select>
 
                 <label htmlFor="player-search" className='font-[600]'>Search Player</label>
-                <input id="player-search" placeholder='Player Search' className='bg-[#c0fcf7] mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'></input>
-
+                <input 
+                    id="player-search" 
+                    placeholder='Player Search' 
+                    className='bg-[#c0fcf7] mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'
+                    onChange={e => setSearchInput(e.target.value)}
+                />
                 <PlayersTable />
             </div>
         </div>

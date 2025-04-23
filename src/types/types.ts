@@ -40,6 +40,12 @@ export interface Player {
     isSelected: boolean
 }
 
+export interface Gameweek {
+    id: number
+    name: string
+    deadline_time: string
+}
+
 export interface SquadType {
     firstEleven: Player[]
     subs: Player[]
@@ -58,4 +64,6 @@ export interface SquadContextType {
     transferOut: Player | undefined
     setTransferIn: React.Dispatch<React.SetStateAction<Player | undefined>>
     setTransferOut: React.Dispatch<React.SetStateAction<Player | undefined>>
+    gameweek: Gameweek
+    setGameweek: React.Dispatch<React.SetStateAction<Gameweek>>
 }

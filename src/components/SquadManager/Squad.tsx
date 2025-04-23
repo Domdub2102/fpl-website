@@ -4,13 +4,22 @@ import React from "react"
 import { swapPlayers, transferPlayer } from "@/lib/utils/utils"
 import { PlayerDialog } from "../PlayerDialog/PlayerDialog"
 import PlayerIcon from "../PlayerIcon/PlayerIcon"
-import { SquadType, Team } from "@/types/types"
+import { Gameweek, SquadType, Team } from "@/types/types"
 import { useSquad } from "@/lib/context/SquadContext"
+import { format } from "date-fns"
 
 
 export default function Squad(
-    { initialSquad, teams }: 
-    { initialSquad: SquadType, teams: Team[] }
+    { 
+        initialSquad, 
+        teams, 
+        gameweeks 
+    }: 
+    { 
+        initialSquad: SquadType, 
+        teams: Team[], 
+        gameweeks: Gameweek[]
+    }
 ) {
     const { 
         currentSquad, 
@@ -23,11 +32,20 @@ export default function Squad(
         setTransferIn,
         transferOut,
         setTransferOut,
+        gameweek,
+        setGameweek
     } = useSquad()
 
+    // find first gameweek which has a future deadline (ie. the current gameweek)
+    const now = new Date()
+    const currentGameweek = gameweeks.find(gameweek => Date.parse(gameweek.deadline_time) > now.getTime())
+
     React.useEffect(() => {
+        if (currentGameweek) {
+            setGameweek(currentGameweek)
+        }
         setCurrentSquad(initialSquad)
-    }, [initialSquad])
+    }, [])
 
     React.useEffect(() => {
         if (startingPlayer && subPlayer) {
@@ -40,7 +58,6 @@ export default function Squad(
 
     React.useEffect(() => {
         if (transferIn && transferOut) {
-            console.log(`${transferIn.web_name}, ${transferOut.web_name}`)
             const updatedSquad = transferPlayer(currentSquad, teams, transferIn, transferOut)
             setCurrentSquad(updatedSquad)
             setTransferIn(undefined)
@@ -48,16 +65,40 @@ export default function Squad(
         }
     }, [transferIn, transferOut])
 
-    console.log(`${startingPlayer}, ${subPlayer}`)
+    
+    function prevGameweek(gameweek: Gameweek) {
+        // check that prevGameweek is not below 1
+        // find previous gw in gameweeks array, then update the value of state
+        if (gameweek.id > 1) {
+            const prevGameweek = gameweeks.find(gw => gw.id === gameweek.id - 1)
+            if (prevGameweek) {
+                setGameweek(prevGameweek)
+            }
+        }
+    }
 
+    function nextGameweek(gameweek: Gameweek) {
+        // check that prevGameweek is not below 1
+        // find previous gw in gameweeks array, then update the value of state
+        if (gameweek.id > 1) {
+            const nextGameweek = gameweeks.find(gw => gw.id === gameweek.id + 1)
+            if (nextGameweek) {
+                setGameweek(nextGameweek)
+            }
+        }
+    }
 
     return (
         <div className='flex flex-col w-2/3 box-border'>
             <div className='flex flex-col basis-2/3 p-[10px] bg-[#c0fcf7] shadow-lg justify-start items-center pl-[100px] pb-[100px]'>
                 <div className='flex flex-row justify-around w-[80%] items-center my-[10px]'>
-                    <button className='btn'>Previous</button>
-                    <span className='font-[600] text-[20px]'>GW1</span>
-                    <button className='btn'>Next</button>
+                    {/* onClick functions required */}
+                    <button onClick={() => prevGameweek(gameweek)} className='btn'>Previous</button>
+                    <div className="flex flex-col items-center">
+                        <span className='font-[600] text-[20px]'>{`Gameweek ${gameweek.id}`}</span>
+                        <span>{`${format(gameweek.deadline_time, "EEE dd MMM, HH:mm")}`}</span>
+                    </div>
+                    <button onClick={() => nextGameweek(gameweek)} className='btn'>Next</button>
                 </div>
                 <div className='flex flex-row justify-around w-[60%] my-[10px]'>
                     <span>Transfers: 0/1</span>
@@ -69,7 +110,7 @@ export default function Squad(
                 >
                     {/* Render firstEleven players by position */}
                     {[1, 2, 3, 4].map(position => (
-                        <div key={position} className="flex flex-row gap-[10px]">
+                        <div key={position} className="flex flex-row gap-[30px]">
                             {currentSquad.firstEleven.filter(player => player.position === position).map(player => (
                                 <PlayerDialog 
                                     key={player.id}
