@@ -33,6 +33,7 @@ export interface Player {
     team: number
     team_id: number
     team_name: string 
+    team_short_name: string
     position: number
     fixtures: Fixture[]
     inFirstEleven: boolean

@@ -29,6 +29,7 @@ export default async function SquadPage() {
         return {
             ...player,
             team_name: team.name,
+            team_short_name: team.short_name,
             fixtures: team.fixtures
         }
     })
@@ -43,11 +44,11 @@ export default async function SquadPage() {
     );
 
     return (
-        <div className='flex flex-col items-center w-full bg-[#2a272a]'>
+        <div className='flex flex-col items-center w-full bg-[#c0fcf7]'>
             <div className='bg-[#c0fcf7] w-full text-center py-[20px]'>
                 <h1 className='text-[40px] text-black font-[800]'>Squad Planner</h1>
             </div>
-            <div className='flex flex-row justify-center w-full'>
+            <div className='flex flex-row justify-center w-full gap-[20px]'>
                 <SquadProvider>
                     <Squad initialSquad={fullSquad} teams={teams} gameweeks={gameweeks}/>
                     <PlayerSelector initialPlayers={sortedPlayers} teams={teams}/>

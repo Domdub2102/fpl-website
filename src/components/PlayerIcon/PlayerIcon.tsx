@@ -5,6 +5,7 @@ import { Player } from '@/types/types'
 import { useSquad } from '@/lib/context/SquadContext'
 
 export default function PlayerIcon ({ player }: {player: Player}) {  
+
   const { gameweek } = useSquad()
 
   const isSelected = player.isSelected

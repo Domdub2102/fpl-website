@@ -40,6 +40,8 @@ export default function Squad(
     const now = new Date()
     const currentGameweek = gameweeks.find(gameweek => Date.parse(gameweek.deadline_time) > now.getTime())
 
+    const [squadValue, setSquadValue] = React.useState("0")
+
     React.useEffect(() => {
         if (currentGameweek) {
             setGameweek(currentGameweek)
@@ -64,6 +66,17 @@ export default function Squad(
             setTransferOut(undefined)
         }
     }, [transferIn, transferOut])
+
+    React.useEffect(() => {
+        let squadValue = 0
+        currentSquad.firstEleven.forEach(player => {
+            squadValue += player.now_cost
+        })
+        currentSquad.subs.forEach(player => {
+            squadValue += player.now_cost
+        })
+        setSquadValue(squadValue.toFixed(1))
+    }, [currentSquad])
 
     
     function prevGameweek(gameweek: Gameweek) {
@@ -90,19 +103,18 @@ export default function Squad(
 
     return (
         <div className='flex flex-col w-2/3 box-border'>
-            <div className='flex flex-col basis-2/3 p-[10px] bg-[#c0fcf7] shadow-lg justify-start items-center pl-[100px] pb-[100px]'>
-                <div className='flex flex-row justify-around w-[80%] items-center my-[10px]'>
+            <div className='flex flex-col basis-2/3 p-[10px] bg-[#c0fcf7] justify-start items-center pl-[100px] pb-[100px]'>
+                <div className='flex flex-row justify-between w-full items-center my-[10px] px-[10px]'>
                     {/* onClick functions required */}
-                    <button onClick={() => prevGameweek(gameweek)} className='btn'>Previous</button>
+                    <button onClick={() => prevGameweek(gameweek)} className='btn w-[100px]'>Previous</button>
                     <div className="flex flex-col items-center">
                         <span className='font-[600] text-[20px]'>{`Gameweek ${gameweek.id}`}</span>
                         <span>{`${format(gameweek.deadline_time, "EEE dd MMM, HH:mm")}`}</span>
                     </div>
-                    <button onClick={() => nextGameweek(gameweek)} className='btn'>Next</button>
+                    <button onClick={() => nextGameweek(gameweek)} className='btn w-[100px]'>Next</button>
                 </div>
                 <div className='flex flex-row justify-around w-[60%] my-[10px]'>
-                    <span>Transfers: 0/1</span>
-                    <span>Budget: $0.0 / $102.1</span>
+                    <span>Squad Value: £{squadValue}</span>
                 </div>
                 <div
                     className="w-full h-[800px] bg-cover bg-center flex flex-col items-center gap-[10px]"

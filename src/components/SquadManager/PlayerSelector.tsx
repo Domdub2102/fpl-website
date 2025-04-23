@@ -34,7 +34,11 @@ export default function PlayerSelector({
             return
         } else {
             const filteredPlayers = filterPlayers(view, sort, maxPrice, initialPlayers)
-            const searchedPlayers = filteredPlayers?.filter(player => player.web_name.toLowerCase().includes(searchInput.toLowerCase()))
+            const searchedPlayers = filteredPlayers?.filter(player => 
+                player.web_name.toLowerCase().includes(searchInput.toLowerCase()) 
+                || player.first_name.toLowerCase().includes(searchInput.toLowerCase()) 
+                || player.second_name.toLowerCase().includes(searchInput.toLowerCase()) 
+            )
             if (searchedPlayers) {
                 setPlayers(searchedPlayers)
             }
