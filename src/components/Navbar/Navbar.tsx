@@ -10,9 +10,8 @@ const Navbar = () => {
     <div className={styles.navbar}>
         <NavbarLogo>FPLibre</NavbarLogo>
         <div className=''>
-          <NavbarLink href="/squad">Gameweeks</NavbarLink>
           <NavbarLink href="/squad">Squad</NavbarLink>
-          <NavbarLink href="/squad">Teams</NavbarLink>
+          <NavbarLink href='/fixtures'>Fixtures</NavbarLink>
           <NavbarLink href="/login">Login</NavbarLink>
         </div>
     </div>

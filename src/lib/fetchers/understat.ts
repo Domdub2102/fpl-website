@@ -12,6 +12,7 @@ interface Team {
     name: string;
     xG: number;
     xGA: number;
+    matches_played: number
 }
 
 interface RawTeamData {
@@ -20,7 +21,7 @@ interface RawTeamData {
 }
 
 
-export async function fetchXgData() {
+export async function understat() {
     try {
         const url = "https://understat.com/league/epl";
         const { data } = await axios.get(url);
@@ -57,6 +58,7 @@ export async function fetchXgData() {
             name: team.title,
             xG: team.history.reduce((sum, match) => sum + parseFloat(match.xG), 0),
             xGA: team.history.reduce((sum, match) => sum + parseFloat(match.xGA), 0),
+            matches_played: team.history.length
           }));
           
 
@@ -65,6 +67,7 @@ export async function fetchXgData() {
             "Tottenham": "Spurs",
             "Manchester United": "Man Utd",
             "Manchester City": "Man City",
+            "Newcastle United": "Newcastle",
             "Nottingham Forest": "Nott'm Forest",
             "Wolverhampton Wanderers": "Wolves"
         }
