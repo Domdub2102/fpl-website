@@ -1,5 +1,6 @@
 import {  Team } from "@/types/types";
 import { understat } from "./understat";
+import { Fixture } from "@/types/types";
 
 export async function fetchTeamsXG() {
     const url = "https://fantasy.premierleague.com/api"
@@ -13,6 +14,10 @@ export async function fetchTeamsXG() {
 
         // creates teams object to then populate wih fixture data
         const teams = mainData.teams.map((team: Team) => {
+            const fixtureObject: Record<number, Fixture[]> = {}
+            for (let i = 1; i < 39; i++) {
+                fixtureObject[i] = []
+            }
             return {
                 id: team.id,
                 name: team.name,
@@ -20,9 +25,10 @@ export async function fetchTeamsXG() {
                 matches_played: 0,
                 xG: 0,
                 xGA: 0,
-                fixtures: []
+                fixtures: fixtureObject
             }
         })
+
 
         const updatedTeams = teams.map((team: Team) => {
             const club = teamsXgData.find(club => club.name === team.name) //find the club in the teams array
@@ -56,30 +62,34 @@ export async function fetchTeamsXG() {
             const awayxGAPer90 = awayTeam.xGA / awayTeam.matches_played
 
             if (homeTeam) {
-                homeTeam.fixtures.push(
-                    { 
-                        opponent_id: team_a, 
-                        opponent_name: awayTeam.name, 
-                        opponent_short: awayTeam.short_name, 
-                        gameweek: event, 
-                        home_away: "H",
-                        xGper90: awayXgPer90,
-                        xGAper90: awayxGAPer90
-                    }
-                )
+                const newFixture = {
+                    opponent_id: team_a, 
+                    opponent_name: awayTeam.name, 
+                    opponent_short: awayTeam.short_name, 
+                    gameweek: event, 
+                    home_away: "H",
+                    xGper90: awayXgPer90,
+                    xGAper90: awayxGAPer90
+                }
+                if (!homeTeam.fixtures[event]) {
+                    homeTeam.fixtures[event] = []
+                }
+                homeTeam.fixtures[event].push(newFixture)
             }
             if (awayTeam) {
-                awayTeam.fixtures.push(
-                    { 
-                        opponent_id: team_h, 
-                        opponent_name: homeTeam.name, 
-                        opponent_short: homeTeam.short_name, 
-                        gameweek: event, 
-                        home_away: "A",
-                        xGper90: homeXgPer90,
-                        xGAper90: homexGAPer90
-                    }
-                )
+                const newFixture = {
+                    opponent_id: team_h, 
+                    opponent_name: homeTeam.name, 
+                    opponent_short: homeTeam.short_name, 
+                    gameweek: event, 
+                    home_away: "A",
+                    xGper90: homeXgPer90,
+                    xGAper90: homexGAPer90
+                }
+                if (!awayTeam.fixtures[event]) {
+                    awayTeam.fixtures[event] = []
+                }
+                awayTeam.fixtures[event].push(newFixture)
             }
         }
         return updatedTeams

@@ -8,6 +8,20 @@ export interface Fixture {
     xGAper90: number
 }
 
+export interface TeamFixtures {
+    [gameweek: number]: Fixture[]
+}
+
+export interface TeamXG {
+    id: number
+    name: string
+    short_name: string
+    matches_played: number
+    xG: string
+    xGA: string
+    fixtures: TeamFixtures
+}
+
 export interface Team {
     id: number
     name: string
