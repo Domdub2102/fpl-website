@@ -7,7 +7,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({isAttack, setIsAttack}) => {
     return (
         <div className="flex items-center space-x-3">
           {/* Left Label */}
-          <span className="text-md font-bold text-black">Attack</span>
+          <span className="text-md font-bold text-black">Attackers</span>
     
           {/* Toggle Button */}
           <button
@@ -24,7 +24,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({isAttack, setIsAttack}) => {
           </button>
     
           {/* Right Label */}
-          <span className="text-md font-bold text-black">Defense</span>
+          <span className="text-md font-bold text-black">Defenders</span>
         </div>
       );
 };

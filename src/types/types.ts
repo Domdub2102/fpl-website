@@ -3,9 +3,11 @@ export interface Fixture {
     opponent_name: string
     opponent_short: string
     gameweek: number
-    home_away: string
+    home_away: "H" | "A"
     xGper90: number
     xGAper90: number
+    xGRank: number
+    xGARank: number
 }
 
 export interface TeamFixtures {

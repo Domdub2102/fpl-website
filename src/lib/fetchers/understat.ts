@@ -13,6 +13,8 @@ interface Team {
     xG: number;
     xGA: number;
     matches_played: number
+    xGRank: number
+    xGARank: number
 }
 
 interface RawTeamData {
@@ -58,10 +60,29 @@ export async function understat() {
             name: team.title,
             xG: team.history.reduce((sum, match) => sum + parseFloat(match.xG), 0),
             xGA: team.history.reduce((sum, match) => sum + parseFloat(match.xGA), 0),
-            matches_played: team.history.length
-          }));
-          
+            matches_played: team.history.length,
+            xGRank: 0,
+            xGARank: 0
+        }));
 
+        teamStats.sort((a, b) => b.xG - a.xG)
+
+        const teamsXgRankAdded = teamStats.map((team, index) => {
+            return {
+                ...team,
+                xGRank: index + 1
+            }
+        })
+
+        teamsXgRankAdded.sort((a, b) => a.xGA - b.xGA)
+
+        const teamsXGARankAdded = teamsXgRankAdded.map((team, index) => {
+            return {
+                ...team,
+                xGARank: index + 1
+            }
+        })
+          
         // Replace strings which don't match other data from FPL API
         const replacements: Record<string, string> = {
             "Tottenham": "Spurs",
@@ -72,7 +93,7 @@ export async function understat() {
             "Wolverhampton Wanderers": "Wolves"
         }
         
-        const updatedTeams: Team[] = teamStats.map((team: Team): Team => {
+        const updatedTeams: Team[] = teamsXGARankAdded.map((team: Team): Team => {
             const updatedTeam: Team = { ...team };
           
             updatedTeam.name = replacements[updatedTeam.name] || updatedTeam.name;

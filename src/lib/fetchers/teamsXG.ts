@@ -25,6 +25,8 @@ export async function fetchTeamsXG() {
                 matches_played: 0,
                 xG: 0,
                 xGA: 0,
+                xGRank: 0,
+                xGARank: 0,
                 fixtures: fixtureObject
             }
         })
@@ -38,6 +40,8 @@ export async function fetchTeamsXG() {
                 ...team,
                 xG: club.xG.toFixed(2),
                 xGA: club.xGA.toFixed(2),
+                xGRank: club.xGRank,
+                xGARank: club.xGARank,
                 matches_played: club.matches_played
             }
             else {
@@ -69,7 +73,9 @@ export async function fetchTeamsXG() {
                     gameweek: event, 
                     home_away: "H",
                     xGper90: awayXgPer90,
-                    xGAper90: awayxGAPer90
+                    xGAper90: awayxGAPer90,
+                    xGRank: awayTeam.xGRank,
+                    xGARank: awayTeam.xGARank
                 }
                 if (!homeTeam.fixtures[event]) {
                     homeTeam.fixtures[event] = []
@@ -84,7 +90,9 @@ export async function fetchTeamsXG() {
                     gameweek: event, 
                     home_away: "A",
                     xGper90: homeXgPer90,
-                    xGAper90: homexGAPer90
+                    xGAper90: homexGAPer90,
+                    xGRank: homeTeam.xGRank,
+                    xGARank: homeTeam.xGARank
                 }
                 if (!awayTeam.fixtures[event]) {
                     awayTeam.fixtures[event] = []
@@ -92,6 +100,7 @@ export async function fetchTeamsXG() {
                 awayTeam.fixtures[event].push(newFixture)
             }
         }
+        console.log(updatedTeams.slice(0,1))
         return updatedTeams
     }
     catch (error) {

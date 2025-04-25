@@ -137,7 +137,7 @@ export default function Squad(
                     ))}
 
                     {/* Render subs */}
-                    <div className="flex flex-col items-center bg-green-400 rounded p-4 mt-10 w-full">
+                    <div className="flex flex-col items-center bg-[#03ba5b] rounded p-4 mt-10 w-full">
                         <div className="flex flex-row gap-[30px]">
                             {currentSquad.subs.map(player => (
                                 <PlayerDialog 

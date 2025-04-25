@@ -12,6 +12,7 @@ UI Fixes:
     - kit icon (sm), name-bold, team, position 
     - general UI improvements
 
+
 To Do:
 - Player search functionality
 - Transfers:
@@ -20,3 +21,5 @@ To Do:
     - Need to use caching (local storage) to set the value of the squad
 - Change Budget to Squad Value:
     - use now_cost property to calculate total value
+- add dark theme to squad and fixtures page?
+- Team Selector checklist in FDR page
