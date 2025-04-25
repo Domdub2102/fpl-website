@@ -64,7 +64,7 @@ export default function FixtureTable(
 
     React.useEffect(() => {
         setProcessedTeams(updatedTeams)
-    }, [minGw, maxGw])
+    }, [minGw, maxGw, isAttack])
 
     // handle clicks of the xgtotal column
     // need to sort by asc / desc 
