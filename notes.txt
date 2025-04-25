@@ -23,3 +23,4 @@ To Do:
     - use now_cost property to calculate total value
 - add dark theme to squad and fixtures page?
 - Team Selector checklist in FDR page
+- Ability to click on GW headers ans sort for that individual week

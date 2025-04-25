@@ -22,6 +22,7 @@ export interface TeamXG {
     xG: string
     xGA: string
     fixtures: TeamFixtures
+    expectedTotal: number
 }
 
 export interface Team {

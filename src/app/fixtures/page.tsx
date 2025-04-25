@@ -6,8 +6,7 @@ export default async function FixturePage() {
     const teams = await fetchTeamsXG()
 
     return (
-        <div className="bg-[#c0fcf7] flex flex-col items-center text-left pb-10">
-            <h1 className="text-2xl font-bold m-10">Fixture Difficulty Page (currently under development)</h1>
+        <div className="bg-[#c0fcf7] flex items-center text-left px-[100px] pb-[100px]">
             <FixtureTable teams={teams}/>
         </div>
     )
