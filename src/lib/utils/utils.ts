@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { Player, Team, SquadType } from "@/types/types"
+import { Player, Team, TeamXG, SquadType } from "@/types/types"
 
 type Position = 1 | 2 | 3 | 4
 
@@ -23,8 +23,29 @@ export function addXgToTeams(teams: Team[], teamsXG: Team[]) {
   return teams
 }
 
-// need to add some sort of state tracking the number of players from each team
-// can simply count number of player from each team and keep checking if its greater than 3 
+export function addFixturesToPlayers(players: Player[], teams: Team[]) {
+    const updatedPlayers = players.map((player: Player) => {
+        const team = teams.find((team: Team) => team.id === player.team_id)
+        
+        if (!team) {
+            console.log(`no team found for player ${player.web_name}`)
+            return {...player, team_name: "Unknown", fixtures: []}
+        }
+
+        return {
+            ...player,
+            team_name: team.name,
+            team_short_name: team.short_name,
+            fixtures: team.fixtures
+        }
+    })
+    return updatedPlayers
+}
+
+export function initialSort(players: Player[]) {
+    return players.sort((p1: Player, p2: Player) => (p1.total_points < p2.total_points) ? 1 : (p1.total_points > p2.total_points) ? -1 : 0)
+}
+
 export function createInitialSquad( players: Player[], teams: Team[] ) {
   const highOwnedPlayers = players.filter((player) => Number(player.selected_by_percent) > 10)
 
@@ -298,4 +319,44 @@ export function filterPlayers(view: string, sort: string, maxPrice: number, init
         )
     }
     return sortedPlayers
+}
+
+
+export function calcExpectedTotals(
+    teams: TeamXG[], 
+    minGw: number,
+    maxGw: number,
+    isAttack: boolean
+) {
+    const updatedTeams = teams.map(team => {
+        let expectedTotal = 0
+    
+        for (const [gw, fixtureArr] of Object.entries(team.fixtures)) {
+            const gwNum = Number(gw)
+            if (gwNum < minGw || gwNum > maxGw) {
+                continue
+            }
+    
+            if (fixtureArr.length === 1) {
+                expectedTotal += isAttack ? fixtureArr[0].xGAper90 : fixtureArr[0].xGper90
+            } else if (fixtureArr.length === 2) {
+                expectedTotal += (isAttack ? fixtureArr[0].xGAper90 + fixtureArr[1].xGAper90 
+                                           : fixtureArr[0].xGper90 + fixtureArr[1].xGper90)
+            }
+        }
+        return {
+            ...team,
+            expectedTotal,
+        }
+    })
+    return updatedTeams
+}
+
+export function getBgColor(rank: number) {
+    if (rank >= 1 && rank <= 4) return "bg-red-700 text-gray-100"; // Dark Red
+    if (rank >= 5 && rank <= 8) return "bg-red-400 text-black"; // Light Red
+    if (rank >= 9 && rank <= 12) return "bg-gray-300 text-black"; // Grey
+    if (rank >= 13 && rank <= 16) return "bg-green-300 text-black"; // Light Green
+    if (rank >= 17 && rank <= 20) return "bg-green-700 text-gray-100"; // Dark Green
+    else return ""
 }

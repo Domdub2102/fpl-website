@@ -100,7 +100,6 @@ export async function fetchTeamsXG() {
                 awayTeam.fixtures[event].push(newFixture)
             }
         }
-        console.log(updatedTeams.slice(0,1))
         return updatedTeams
     }
     catch (error) {

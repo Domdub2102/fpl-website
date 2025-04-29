@@ -10,6 +10,7 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover"
+import { calcExpectedTotals, getBgColor } from "@/lib/utils/utils"
 
 
 export default function FixtureTable(
@@ -22,38 +23,9 @@ export default function FixtureTable(
     const [processedTeams, setProcessedTeams] = React.useState<TeamXG[]>([])
     const [sortDirection, setSortDirection] = React.useState('desc'); // 'asc' or 'desc'
 
-    function getBgColor(rank: number) {
-        if (rank >= 1 && rank <= 4) return "bg-red-700 text-gray-100"; // Dark Red
-        if (rank >= 5 && rank <= 8) return "bg-red-400 text-black"; // Light Red
-        if (rank >= 9 && rank <= 12) return "bg-gray-300 text-black"; // Grey
-        if (rank >= 13 && rank <= 16) return "bg-green-300 text-black"; // Light Green
-        if (rank >= 17 && rank <= 20) return "bg-green-700 text-gray-100"; // Dark Green
-        else return ""
-    }
 
-    // allows teams to be sorted by their expected totals
-    const updatedTeams = teams.map(team => {
-        let expectedTotal = 0
-    
-        for (const [gw, fixtureArr] of Object.entries(team.fixtures)) {
-            const gwNum = Number(gw)
-            if (gwNum < minGw || gwNum > maxGw) {
-                continue
-            }
-    
-            if (fixtureArr.length === 1) {
-                expectedTotal += isAttack ? fixtureArr[0].xGAper90 : fixtureArr[0].xGper90
-            } else if (fixtureArr.length === 2) {
-                expectedTotal += (isAttack ? fixtureArr[0].xGAper90 + fixtureArr[1].xGAper90 
-                                           : fixtureArr[0].xGper90 + fixtureArr[1].xGper90)
-            }
-        }
-    
-        return {
-            ...team,
-            expectedTotal,
-        }
-    })
+    // adds expected totals to teams to allow for sorting
+    const updatedTeams = calcExpectedTotals(teams, minGw, maxGw, isAttack)
 
     /**
      * BUG:
@@ -89,11 +61,11 @@ export default function FixtureTable(
     
 
     return (
-        <div className="w-full flex flex-col justify-center items-center">
-            <div className="flex flex-row justify-between my-10 w-full">
-                <h1 className="text-[35px] text-black font-[800]">Fixture Difficulty Ratings</h1>
+        <div className="w-full flex flex-col justify-center items-center p-2">
+            <div className="flex flex-col md:flex-row lg:flex-row justify-between items-start md:mb-6 md:mt-4 lg:my-10 w-full">
+                <h1 className="text-3xl lg:text-[35px] text-black font-[800] mb-3 md:mb-0 lg:mb-0">Fixture Difficulty Ratings</h1>
                 <Popover>
-                    <PopoverTrigger className='cursor-pointer border border-gray-500 rounded-sm p-2 hover:bg-[#75d2ce] hover:text-black hover:border-none'>
+                    <PopoverTrigger className='cursor-pointer border border-gray-500 rounded-sm p-2 hover:bg-[#75d2ce] hover:text-black hover:border-none mb-3 md:mb-0 lg:mb-0'>
                         <h3>Click for Explanation and Instructions</h3>
                     </PopoverTrigger>
                     <PopoverContent>
@@ -104,17 +76,19 @@ export default function FixtureTable(
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="flex w-full pb-2 justify-between items-end">
+            <div className="flex flex-col md:flex-row lg:flex-row w-full lg:pb-2 justify-between items-start md:items-center lg:items-end gap-3 lg:gap-0 mb-2 lg:mb-0">
                 <ToggleButton isAttack={isAttack} setIsAttack={setIsAttack}/>                
                 <GameweekSelector minGw={minGw} setMinGw={setMinGw} maxGw={maxGw} setMaxGw={setMaxGw} />
-                <Key />
+                <div className="pl-10 lg:pl-0">
+                    <Key/>
+                </div>
             </div>
-            <div className="overflow-auto h-[700px] w-full border-none rounded-sm bg-[#bffcf7] shadow-lg">
+            <div className="overflow-auto md:h-[350px] lg:h-[700px] w-full border-none rounded-sm bg-[#bffcf7] shadow-lg">
                 <table className="table-auto border-spacing-none w-full border-collapse">
                     <thead>
                         <tr>
-                            <th className="min-w-[170px] bg-teal-200 sticky left-0 top-0 z-10 text-black text-left text-lg border-b-1 border-black">
-                                <div className="pl-5">
+                            <th className="min-w-[100px] lg:min-w-[170px] bg-teal-200 sticky left-0 top-0 z-10 text-black text-left text-md lg:text-lg border-b-1 border-black">
+                                <div className="pl-1 lg:pl-5 pr-1 lg:pr-0">
                                     Team
                                 </div> 
                             </th>
@@ -131,7 +105,7 @@ export default function FixtureTable(
                                 }
                             })}
                             <th 
-                                className="min-w-[140px] pl-[5px] text-center cursor-pointer sticky right-0 top-0 z-10 bg-teal-200 text-black border-b-1 border-black"
+                                className="lg:min-w-[140px] pl-[5px] text-center cursor-pointer sticky right-0 top-0 z-10 bg-teal-200 text-black border-b-1 border-black"
                                 onClick={() => sortTeamsByExpectedTotal()}
                             >                                
                                 {isAttack ? "xGA Total" : "xG Total"}
@@ -142,8 +116,8 @@ export default function FixtureTable(
                         {processedTeams.map((team: TeamXG) => {
                             return (
                                 <tr key={team.id}>
-                                    <th className="min-w-[170px] text-lg font-bold sticky left-0 text-black bg-teal-200 border-b-1 border-black">
-                                        <div className="py-[33px] pl-5 w-full h-full">
+                                    <th className="min-w-[100px] lg:min-w-[170px] text-md lg:text-lg font-bold sticky left-0 text-black bg-teal-200 border-b-1 border-black">
+                                        <div className="py-[33px] pl-1 lg:pl-5 w-full h-full truncate">
                                             {team.name}
                                         </div>                                        
                                     </th>
@@ -203,7 +177,7 @@ export default function FixtureTable(
                                         }
                                     })}
                                     
-                                    <th className="min-w-[170px] text-lg font-bold sticky right-0 text-black bg-teal-200 border-b-1 border-black text-center">
+                                    <th className="min-w-[85px] lg:min-w-[170px] text-lg font-bold sticky right-0 text-black bg-teal-200 border-b-1 border-black text-center">
                                         <div className="py-[33px]">
                                             {team.expectedTotal.toFixed(1)}
                                         </div>                                        

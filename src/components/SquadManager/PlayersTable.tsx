@@ -10,8 +10,6 @@ export default function PlayersTable () {
 
     const { players } = useSquad()
 
-    console.log(players.slice(0,1))
-
     const [currentPage, setCurrentPage] = React.useState(1)
     const pageSize = 10
     const startIndex = pageSize * (currentPage - 1)
