@@ -28,9 +28,9 @@ export default async function SquadPage() {
     const sortedPlayers = initialSort(updatedPlayers)
 
     return (
-        <div className='flex flex-col items-center w-full bg-[#c0fcf7] lg:px-[100px] lg:pb-10 p-2'>
+        <div className='flex flex-col items-center w-full bg-[#c0fcf7] xl:px-[100px] lg:pb-10 p-2 sm:p-5'>
             <div className='bg-[#c0fcf7] w-full text-center md:text-left lg:text-left md:py-2 lg:py-[20px]'>
-                <h1 className='text-4xl lg:text-[40px] text-black font-[800] mb-2'>Squad Planner</h1>
+                <h1 className='text-4xl lg:text-[40px] text-black font-[800] mb-2 sm:pb-2'>Squad Planner</h1>
             </div>
             <div className='flex flex-col md:flex-row lg:flex-row justify-center w-full md:gap-2 lg:gap-[20px]'>
                 <SquadProvider>

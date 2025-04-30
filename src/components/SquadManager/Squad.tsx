@@ -102,9 +102,9 @@ export default function Squad(
     }
 
     return (
-        <div className='flex flex-col md:w-1/2 lg:w-2/3 box-border'>
-            <div className='flex flex-col lg:basis-2/3 px-1 lg:p-[10px] bg-teal-200 shadow-lg justify-start items-center mb-45 lg:pb-[100px]'>
-                <div className='flex flex-row justify-between w-full items-center my-[10px] lg:px-[10px]'>
+        <div className='flex flex-col md:w-3/5 lg:w-2/3 box-border'>
+            <div className='flex flex-col lg:basis-2/3 px-1 sm:px-2 lg:p-[10px] bg-teal-200 shadow-lg justify-start items-center pb-43 sm:pb-42 md:pb-24 lg:pb-25'>
+                <div className='flex flex-row justify-between w-full items-center my-[10px] sm:px-3 md:px-3 lg:px-[10px]'>
                     {/* onClick functions required */}
                     <button onClick={() => prevGameweek(gameweek)} className='btn w-[80px] lg:w-[100px]'>Previous</button>
                     <div className="flex flex-col items-center">
@@ -117,7 +117,7 @@ export default function Squad(
                     <span>Squad Value: £{squadValue}</span>
                 </div>
                 <div
-                    className="w-full h-[500px] lg:h-[868px] bg-cover bg-center flex flex-col items-center lg:gap-5"
+                    className="w-full h-[500px] sm:h-[600px] md:h-[700px] lg:h-[868px] xl:h-[900px] bg-cover bg-center flex flex-col items-center lg:gap-5"
                     style={{ backgroundImage: "url(/pitch3.svg)" }}
                 >
                     {/* Render firstEleven players by position */}
@@ -134,7 +134,7 @@ export default function Squad(
                     ))}
 
                     {/* Render subs */}
-                    <div className="flex flex-col items-center bg-[#03ba5b] rounded lg:p-4 mt-5 lg:mt-10 w-full">
+                    <div className="flex flex-col items-center bg-[#03ba5b] rounded sm:pt-1 md:py-3 lg:pt-7 xl:pt-3 mt-4 w-full">
                         <div className="flex flex-row gap-[20px]">
                             {currentSquad.subs.map(player => (
                                 <PlayerDialog 
@@ -146,7 +146,7 @@ export default function Squad(
                                 />
                             ))}
                         </div>
-                        <h2 className="text-[18px] font-semibold py-1 lg:mt-3">Substitutes</h2>
+                        <h2 className="text-[18px] font-semibold py-1 sm:py-3 md:mt-2 lg:mt-3">Substitutes</h2>
                     </div>
                 </div>
             </div>

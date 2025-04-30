@@ -61,11 +61,11 @@ export default function FixtureTable(
     
 
     return (
-        <div className="w-full flex flex-col justify-center items-center p-2">
-            <div className="flex flex-col md:flex-row lg:flex-row justify-between items-start md:mb-6 md:mt-4 lg:my-10 w-full">
-                <h1 className="text-3xl lg:text-[35px] text-black font-[800] mb-3 md:mb-0 lg:mb-0">Fixture Difficulty Ratings</h1>
+        <div className="w-full flex flex-col justify-center items-center">
+            <div className="flex flex-col lg:flex-row justify-between items-center mb-3 lg:my-10 w-full">
+                <h1 className="text-3xl lg:text-[35px] text-black font-[800] mb-3 lg:mb-0">Fixture Difficulty Ratings</h1>
                 <Popover>
-                    <PopoverTrigger className='cursor-pointer border border-gray-500 rounded-sm p-2 hover:bg-[#75d2ce] hover:text-black hover:border-none mb-3 md:mb-0 lg:mb-0'>
+                    <PopoverTrigger className='cursor-pointer border border-gray-500 rounded-sm p-2 hover:bg-[#75d2ce] hover:text-black hover:border-none mb-3 lg:mb-0'>
                         <h3>Click for Explanation and Instructions</h3>
                     </PopoverTrigger>
                     <PopoverContent>
@@ -76,14 +76,16 @@ export default function FixtureTable(
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="flex flex-col md:flex-row lg:flex-row w-full lg:pb-2 justify-between items-start md:items-center lg:items-end gap-3 lg:gap-0 mb-2 lg:mb-0">
-                <ToggleButton isAttack={isAttack} setIsAttack={setIsAttack}/>                
-                <GameweekSelector minGw={minGw} setMinGw={setMinGw} maxGw={maxGw} setMaxGw={setMaxGw} />
-                <div className="pl-10 lg:pl-0">
+            <div className="flex flex-col lg:flex-row w-full lg:pb-2 justify-between items-center lg:items-end gap-3 lg:gap-0 mb-2 lg:mb-0">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-20 items-center sm:pb-3">
+                    <ToggleButton isAttack={isAttack} setIsAttack={setIsAttack}/>                
+                    <GameweekSelector minGw={minGw} setMinGw={setMinGw} maxGw={maxGw} setMaxGw={setMaxGw} />
+                </div>
+                <div className="lg:pl-0">
                     <Key/>
                 </div>
             </div>
-            <div className="overflow-auto md:h-[350px] lg:h-[700px] w-full border-none rounded-sm bg-[#bffcf7] shadow-lg">
+            <div className="overflow-auto lg:h-[700px] w-full border-none rounded-sm bg-[#bffcf7] shadow-lg">
                 <table className="table-auto border-spacing-none w-full border-collapse">
                     <thead>
                         <tr>

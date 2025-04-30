@@ -40,7 +40,7 @@ export default function PlayerIcon ({ player }: {player: Player}) {
   return (
     <div className={`relative flex flex-col items-center font-[500] text-center border-2 ${borderColor} rounded-md cursor-pointer hover:border-white`}>
         {subInfo}
-        <div className='w-[60px] lg:w-[90px]'>
+        <div className='w-[60px] sm:w-[75px] md:w-[75px] lg:w-[80px] xl:w-[90px]'>
             <Image 
                 src={`/KitIcons/${player.team_name} Front.png`}
                 alt={`${player.team_name} Kit Icon`}
@@ -49,12 +49,12 @@ export default function PlayerIcon ({ player }: {player: Player}) {
                 className='w-full h-auto'
             />
         </div>
-        <div className='flex flex-col items-center w-[60px] lg:w-[125px] truncate'>
+        <div className='flex flex-col items-center w-[60px] sm:w-[80px] md:w-[80px] lg:w-[100px] xl:w-[125px]'>
             <span className="badge rounded-none rounded-t-[4px] lg:text-[15px] w-full lg:py-4">
-              {player.web_name}
+              <p className='truncate'>{player.web_name}</p>
             </span>
             <span className="badge rounded-none rounded-b-[4px] bg-cyan-200 border-none text-black text-[12px] lg:text-[13px] w-full font-medium">
-              {fixture}
+              <p className='truncate'>{fixture}</p>
             </span>
         </div>
     </div>

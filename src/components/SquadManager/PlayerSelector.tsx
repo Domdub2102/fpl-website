@@ -59,7 +59,7 @@ export default function PlayerSelector({
         priceOptions.unshift(i)
     }
     return (
-        <div className="w-full md:w-1/2 lg:w-1/3 bg-[#c0fcf7] p-1 md:p-0">
+        <div className="w-full md:w-2/5 lg:w-1/3 bg-[#c0fcf7] my-5 md:my-0">
             <div className='flex flex-col lg:p-[10px] bg-teal-200 shadow-lg p-1'>
                 <h3 className='text-[30px] font-[800] mb-[20px]'>Player Transfers</h3>
 
@@ -92,7 +92,7 @@ export default function PlayerSelector({
                 <select 
                     name="sort" 
                     id="sort" 
-                    className='bg-[#c0fcf7] mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'
+                    className='bg-[#c0fcf7] mb-[15px] xl:mb-6 p-[5px] text-[14px] font-[400] rounded-sm'
                     onChange={e => setSort(e.target.value)}
                 >
                     <option value="Total Points">Total Points</option>
@@ -105,7 +105,7 @@ export default function PlayerSelector({
                 <select 
                     name="maxPrice" 
                     id="maxPrice" 
-                    className='bg-[#c0fcf7] mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'
+                    className='bg-[#c0fcf7] mb-[15px] xl:mb-6 p-[5px] text-[14px] font-[400] rounded-sm'
                     onChange={e => setMaxPrice(parseFloat(e.target.value))}
                 >
                     {priceOptions.map(value => 
@@ -119,7 +119,7 @@ export default function PlayerSelector({
                 <input 
                     id="player-search" 
                     placeholder='Player Search' 
-                    className='bg-[#c0fcf7] mb-[15px] p-[5px] text-[14px] font-[400] rounded-sm'
+                    className='bg-[#c0fcf7] mb-[15px] xl:mb-7 p-[5px] text-[14px] font-[400] rounded-sm'
                     onChange={e => setSearchInput(e.target.value)}
                 />
                 <PlayersTable />
