@@ -61,25 +61,18 @@ export default function PlayerCard({ player }: PlayerProps) {
         }
     }
 
-    // disable removedbtn when sub in progress:
-    const removeBtnDisabledClass = subInProgress ? "pointer-events-none" : ""
+   
+    const removeBtnDisabledClass = subInProgress ? "pointer-events-none opacity-55" : ""
+    const subBtnDisabledClass = (removedPlayers.length > 0 || (subInProgress && !player.ableToSub) ) ? "pointer-events-none opacity-55" : ""
 
-    function subBtnDisabledClass(player: Player) {
-        if (removedPlayers.length > 0) {
-            return "opacity-40 pointer-events-none"
-        }
-        if (subInProgress && !player.ableToSub) {
-            return "pointer-events-none"
-        }
-        return ""
-    }
+    const removeBtnActive = player.isRemoved ? "bg-amber-400 text-black border-none" : ""
 
     return (
         <div key={player.id} className="relative">                                    
             <HoverInfo 
                 trigger={
                     <button 
-                        className={`${removeBtnDisabledClass} absolute top-[3px] right-[3px] btn btn-circle shadow-none w-[15px] h-[15px] m-0 pb-[3px] z-10`}
+                        className={`${removeBtnDisabledClass} ${removeBtnActive} absolute top-[3px] right-[3px] btn btn-circle shadow-none w-[15px] h-[15px] m-0 pb-[3px] z-10`}
                         onClick={() => handleTransferClick(player)}
                     >
                         x
@@ -90,7 +83,7 @@ export default function PlayerCard({ player }: PlayerProps) {
             <HoverInfo 
                 trigger={                    
                     <button 
-                        className={`${subBtnDisabledClass(player)} absolute top-[3px] left-[3px] btn btn-circle bg-none border-none shadow-none w-[15px] h-[15px] m-0 z-10`}
+                        className={`${subBtnDisabledClass} absolute top-[3px] left-[3px] btn btn-circle bg-none shadow-none w-[15px] h-[15px] m-0 z-10`}
                         onClick={() => handleSubClick(player)}
                     >
                         <Image 

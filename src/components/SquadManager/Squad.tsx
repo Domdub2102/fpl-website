@@ -19,7 +19,6 @@ export default function Squad(
 ) {
 
     const { 
-        players,
         currentSquad, 
         setCurrentSquad, 
         gameweek,
@@ -31,14 +30,6 @@ export default function Squad(
     // find first gameweek which has a future deadline (ie. the current gameweek)
     const now = new Date()
     const currentGameweek = gameweeks.find(gameweek => Date.parse(gameweek.deadline_time) > now.getTime())
-
-
-    // Squad check:
-    React.useEffect(() => {
-        console.log(currentSquad)
-        const colePalmer = players.find(player => player.web_name === "Palmer")
-        console.log(colePalmer)
-    }, [currentSquad])
 
     // sets initial value of squad and gameweek on first render
     React.useEffect(() => {

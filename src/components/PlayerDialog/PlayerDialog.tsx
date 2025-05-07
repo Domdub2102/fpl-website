@@ -92,20 +92,10 @@ export default function PlayerDialog({ player, openDialog }: Props) {
             setSubInProgress(false)
         }
     }
-
-    /* needs subInProgress, player and handleSubClick as props
-    const subBtn = 
-        player.inFirstEleven || player.inSubs 
-            ? (
-                <button 
-                    className='btn btn-neutral'
-                    onClick={() => handleSubClick(player)}
-                >
-                    {subInProgress ? "Complete Sub" : "Substitute"}
-                </button>
-            )
-            : <div></div>
-    */
+    /**
+     * TODO:
+     * Disable sub button in dialog when remove players is active
+     */
  
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -128,7 +118,11 @@ export default function PlayerDialog({ player, openDialog }: Props) {
                         handleSubClick={handleSubClick}
                         setOpen={setOpen}
                     />
-                    <TransferBtn player={player} handleTransferClick={handleTransferClick} setOpen={setOpen}/>
+                    <TransferBtn 
+                        player={player} 
+                        handleTransferClick={handleTransferClick} 
+                        setOpen={setOpen}
+                    />
                 </div>
             </DialogContent>
         </Dialog>

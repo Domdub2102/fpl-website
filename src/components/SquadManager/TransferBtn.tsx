@@ -1,5 +1,6 @@
 import React from 'react'
 import { Player } from '@/types/types'
+import { useSquad } from '@/lib/context/SquadContext'
 
 interface TransferInProps {
     player: Player
@@ -9,6 +10,18 @@ interface TransferInProps {
 
 export default function TransferBtn({ player, handleTransferClick, setOpen }: TransferInProps) {
 
+    const { removedPlayers } = useSquad()
+
+    const btnText = (
+        player.inFirstEleven || player.inSubs 
+            ? player.isRemoved
+                ? "Restore Player"
+                : "Remove Player"
+            : removedPlayers.length > 0 
+                ? "Add to Squad"
+                : "First remove players from squad"
+    )
+
     return (
         <button 
             onClick={() => {
@@ -17,7 +30,7 @@ export default function TransferBtn({ player, handleTransferClick, setOpen }: Tr
             }}
             className={`btn btn-neutral w-full`}
         >
-            {player.isRemoved ? "Restore Player": "Add to Squad"}
+            {btnText}
         </button>
     ) 
 }
