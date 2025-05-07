@@ -72,7 +72,7 @@ export default function Squad(
 
     return (
         <div className='flex flex-col md:w-3/5 lg:w-2/3 box-border'>
-            <div className='flex flex-col lg:basis-2/3 px-1 sm:px-2 lg:p-[10px] bg-teal-200 shadow-lg justify-start items-center pb-43 sm:pb-42 md:pb-24 lg:pb-25'>
+            <div className='flex flex-col lg:basis-2/3 px-1 sm:px-2 lg:p-[10px] bg-teal-200 shadow-lg justify-start items-center pb-43 sm:pb-42 md:pb-24 lg:pb-27'>
                 <div className='flex flex-row justify-between w-full items-center my-[10px] sm:px-3 md:px-3 lg:px-[10px]'>
                     {/* onClick functions required */}
                     <button onClick={() => handleGameweekClick("previous")} className='btn w-[80px] lg:w-[100px]'>Previous</button>
@@ -106,7 +106,7 @@ export default function Squad(
                     ))}
 
                     {/* Render subs */}
-                    <div className="flex flex-col items-center bg-[#03ba5b] rounded sm:pt-1 md:py-3 lg:pt-7 xl:pt-3 mt-4 w-full">
+                    <div className="flex flex-col items-center bg-[#03ba5b] rounded sm:pt-1 md:py-3 lg:pt-9 xl:pt-5 mt-4 w-full">
                         <div className="flex flex-row gap-[20px]">
                             {currentSquad.filter(player => player.inSubs).map(player => (
                                 <div key={player.id} className="flex flex-col items-center"> 

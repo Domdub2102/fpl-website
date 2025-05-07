@@ -60,19 +60,23 @@ export default function PlayerDialog({ player, openDialog }: Props) {
         // this section for players in the table, not the squad
         else {
             // if clicked player already in the current squad
-            if (removedPlayers.find(player => player.id === clickedPlayer.id)) {
-                console.log("player already in squad")
+            if (currentSquad.find(player => player.id === clickedPlayer.id)) {
+                console.log(`${player.web_name} already in squad`)
                 setRemovedPlayers(prevRemovedPlayers => 
                     prevRemovedPlayers.filter(player => player.id !== clickedPlayer.id)
                 )
                 updatedSquad = restorePlayer(clickedPlayer, currentSquad)
             }
-            updatedSquad = completeSquadTransfer(clickedPlayer, removedPlayers, currentSquad)
-            const removedPlayer = removedPlayers.find(player => player.position === clickedPlayer.position)
-            if (removedPlayer) {
-                setRemovedPlayers(prevRemovedPlayers => 
-                    prevRemovedPlayers.filter(player => player.id !== removedPlayer.id)
-                )
+            else {
+                updatedSquad = completeSquadTransfer(clickedPlayer, removedPlayers, currentSquad)
+                if (updatedSquad !== currentSquad) {
+                    const removedPlayer = removedPlayers.find(player => player.position === clickedPlayer.position)
+                    if (removedPlayer) {
+                        setRemovedPlayers(prevRemovedPlayers => 
+                            prevRemovedPlayers.filter(player => player.id !== removedPlayer.id)
+                        )
+                    }
+                }
             }
         }
         setCurrentSquad(updatedSquad)
@@ -112,17 +116,23 @@ export default function PlayerDialog({ player, openDialog }: Props) {
                     <DialogTitle className='text-center mb-5'>{player.first_name + " " + player.second_name}</DialogTitle>
                 </DialogHeader>
                 <div className="flex flex-col justify-center items-center">
-                    <SubBtn 
-                        player={player}
-                        subInProgress={subInProgress}
-                        handleSubClick={handleSubClick}
-                        setOpen={setOpen}
-                    />
-                    <TransferBtn 
-                        player={player} 
-                        handleTransferClick={handleTransferClick} 
-                        setOpen={setOpen}
-                    />
+                    {removedPlayers.length > 0 
+                        ? <div></div>
+                        : <SubBtn 
+                            player={player}
+                            subInProgress={subInProgress}
+                            handleSubClick={handleSubClick}
+                            setOpen={setOpen}
+                        />
+                    }
+                    {subInProgress 
+                        ? <div></div>
+                        : <TransferBtn 
+                            player={player} 
+                            handleTransferClick={handleTransferClick} 
+                            setOpen={setOpen}
+                        />
+                    }
                 </div>
             </DialogContent>
         </Dialog>

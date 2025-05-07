@@ -1,3 +1,4 @@
+import React from "react"
 import Image from "next/image"
 import { Player } from "@/types/types"
 import { useSquad } from "@/lib/context/SquadContext"
@@ -33,7 +34,6 @@ export default function PlayerCard({ player }: PlayerProps) {
             setRemovedPlayers(prevRemovedPlayers => 
                 prevRemovedPlayers.filter(player => player.id !== clickedPlayer.id)
             )
-            console.log("restored player")
         }
         else {
             updatedSquad = removePlayer(clickedPlayer, currentSquad)
@@ -41,7 +41,6 @@ export default function PlayerCard({ player }: PlayerProps) {
                 ...prevRemovedPlayers,
                 clickedPlayer
             ])
-            console.log("removed player")
         }
         setCurrentSquad(updatedSquad)
     }
@@ -72,7 +71,7 @@ export default function PlayerCard({ player }: PlayerProps) {
             <HoverInfo 
                 trigger={
                     <button 
-                        className={`${removeBtnDisabledClass} ${removeBtnActive} absolute top-[3px] right-[3px] btn btn-circle shadow-none w-[15px] h-[15px] m-0 pb-[3px] z-10`}
+                        className={`${removeBtnDisabledClass} ${removeBtnActive} hidden sm:flex absolute top-[3px] right-[3px] btn btn-circle shadow-none w-[15px] h-[15px] m-0 pb-[3px] z-10`}
                         onClick={() => handleTransferClick(player)}
                     >
                         x
@@ -83,7 +82,7 @@ export default function PlayerCard({ player }: PlayerProps) {
             <HoverInfo 
                 trigger={                    
                     <button 
-                        className={`${subBtnDisabledClass} absolute top-[3px] left-[3px] btn btn-circle bg-none shadow-none w-[15px] h-[15px] m-0 z-10`}
+                        className={`${subBtnDisabledClass} hidden sm:flex absolute top-[3px] left-[3px] btn btn-circle bg-none shadow-none w-[15px] h-[15px] m-0 z-10`}
                         onClick={() => handleSubClick(player)}
                     >
                         <Image 

@@ -10,14 +10,13 @@ export function cn(...inputs: ClassValue[]) {
 
 export function addXgToTeams(teams: Team[], teamsXG: Team[]) {
   for (const item of teamsXG) {
-      console.log(`Looking for team: ${item.name}`)
       const currentTeam = teams.find(team => team.name === item.name)
 
       if (currentTeam) {
           currentTeam.xG = item.xG
           currentTeam.xGA = item.xGA
       } else {
-          console.log(`Team not found: ${item.name}`)
+          console.error(`Team not found: ${item.name}`)
       }
   }
   return teams
@@ -340,25 +339,44 @@ export function restorePlayer(clickedPlayer: Player, currentSquad: Player[]) {
 // adds clicked player (from table) at the correct index of removed player,
 // with the same properties (subs/11) as the removed player
 export function completeSquadTransfer(clickedPlayer: Player, removedPlayers: Player[], currentSquad: Player[]) {
-    
+
     const removedPlayer = removedPlayers.find(player => player.position === clickedPlayer.position)
-    const removedPlayerIndex = currentSquad.findIndex(player => player.id === removedPlayer?.id)
-    if (removedPlayer) {
-        return [
-            ...currentSquad.slice(0, removedPlayerIndex),
-            {
-                ...clickedPlayer,
-                inSubs: removedPlayer.inSubs,
-                inFirstEleven: removedPlayer.inFirstEleven
-            },
-            ...currentSquad.slice(removedPlayerIndex + 1)
-        ]
-    }
-    else {
+    if (!removedPlayer) {
         console.log("Transfer not possible, invalid formation")
         return currentSquad
     }
-    // if removedPlayer not found then return currentSquad
+
+    const teamDict: Record<number, {count: number, limit: number}> = {}
+    currentSquad.forEach(player => {
+        if (!teamDict[player.team_id]) {
+            teamDict[player.team_id] = { count: 1, limit: 3 }
+        }
+        else {
+            teamDict[player.team_id].count++
+        }
+    })
+
+    // checks if new player might be the fourth of their club,
+    // returns currentSquad if player being removed is also not from their club
+    if (teamDict[clickedPlayer.team_id]) {
+        if (teamDict[clickedPlayer.team_id].count === teamDict[clickedPlayer.team_id].limit) {
+            if (removedPlayer.team_id !== clickedPlayer.team_id) {
+                console.log("Cannot have more than 3 players from the same team")
+                return currentSquad
+            }
+        }
+    }
+    
+    const removedPlayerIndex = currentSquad.findIndex(player => player.id === removedPlayer?.id)
+    return [
+        ...currentSquad.slice(0, removedPlayerIndex),
+        {
+            ...clickedPlayer,
+            inSubs: removedPlayer.inSubs,
+            inFirstEleven: removedPlayer.inFirstEleven
+        },
+        ...currentSquad.slice(removedPlayerIndex + 1)
+    ]
 }
 
 
