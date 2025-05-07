@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { Player, Team, TeamXG, SquadType } from "@/types/types"
+import { Player, Team, TeamXG, Gameweek } from "@/types/types"
 
 type Position = 1 | 2 | 3 | 4
 
@@ -46,251 +46,194 @@ export function initialSort(players: Player[]) {
     return players.sort((p1: Player, p2: Player) => (p1.total_points < p2.total_points) ? 1 : (p1.total_points > p2.total_points) ? -1 : 0)
 }
 
-export function createInitialSquad( players: Player[], teams: Team[] ) {
-  const highOwnedPlayers = players.filter((player) => Number(player.selected_by_percent) > 10)
 
-  const positions: Record<Position, {count:number; limit:number}> = {
-      1: { count: 0, limit: 2 }, //keeper
-      2: { count: 0, limit: 5 }, //defender
-      3: { count: 0, limit: 5 }, //mid
-      4: { count: 0, limit: 3 }  //attacker
-  }
+// createSquad has its own squad state
+export function createSquad(players: Player[], teams: Team[]) {
+    // filters out unpopular players initially
+    const highOwnedPlayers = players.filter((player) => Number(player.selected_by_percent) > 10)
 
-  // creates lookup dictionary of all the teams
-  const teamDict: Record<number, {count: number, limit: number}> = {}
-  teams.forEach(team => {
-    teamDict[team.id] = { count: 0, limit: 3 }
-  })
-
-  /**
-   * team object has name and id properties
-   * player has team_id and team_name
-   */
-
-  const squad = []
-
-  for (const player of highOwnedPlayers) {
-    const teamId = player.team_id
-    const position = player.position as Position
-    if (
-        positions[position].count < positions[position].limit && 
-        teamDict[teamId].count < teamDict[teamId].limit
-    ) {
-        squad.push(player)
-        positions[position].count++
-        teamDict[teamId].count++
+    // lookup dicts to define:
+    // - max no. of players in each position
+    // - formation (ie positions in firsteleven)
+    // - max players per team (3)
+    const positions: Record<Position, {count:number; limit:number}> = {
+        1: { count: 0, limit: 2 }, //keeper
+        2: { count: 0, limit: 5 }, //defender
+        3: { count: 0, limit: 5 }, //mid
+        4: { count: 0, limit: 3 }  //attacker
     }
-    if (squad.length >= 15) {
-        break
-    }
-  }
-  return squad
-}
-
-
-
-// takes position states to set the formation
-export function createFullSquad( 
-    squad: Player[], 
-    defenders:number, 
-    midfielders:number, 
-    attackers:number 
-) {
-    const squadDict: Record<Position, {count: number, limit: number}> = {
+    const firstEleven: Record<Position, {count: number, limit: number}> = {
         1: { count: 0, limit: 1 },
-        2: { count: 0, limit: defenders},
-        3: { count: 0, limit: midfielders },
-        4: { count: 0, limit: attackers }
+        2: { count: 0, limit: 3},
+        3: { count: 0, limit: 5},
+        4: { count: 0, limit: 2}
     }
-    const fullSquad: SquadType = {
-        firstEleven: [],
-        subs: []
-    }
-    for (const player of squad) {
-        const position = player.position as Position
-        if (squadDict[position].count < squadDict[position].limit) {
-            player.inFirstEleven = true
-            fullSquad.firstEleven.push(player)
-            squadDict[position].count++
-        } else {
-            player.inSubs = true
-            fullSquad.subs.push(player)
-        }
-    }
-    return fullSquad
-}
-
-export function unselectPlayers(squad: SquadType) {
-    const updatedFirstEleven = squad.firstEleven.map((player: Player)=> ({
-        ...player,
-        isSelected: false
-    }))
-    const updatedSubs = squad.subs.map((player: Player) => ({
-        ...player,
-        isSelected: false
-    }))
-    const updatedSquad = {
-        firstEleven: updatedFirstEleven,
-        subs: updatedSubs
-    }
-    return updatedSquad
-}
-
-
-// Swapping players between firstEleven and subs
-export function swapPlayers(startingPlayer: Player, subPlayer: Player, squad: SquadType) {
-    if (!startingPlayer || !subPlayer) {
-        console.log("Please select exactly two players to swap.")
-        const updatedSquad = unselectPlayers(squad)
-        return updatedSquad
-    }
-
-    //each player has a position property equal to 1, 2, 3, or 4
-    const positions: Record<Position, {current: number, min: number, max: number}> = {
-        1: {current: 0, min: 1, max: 1},
-        2: {current: 0, min: 3, max: 5},
-        3: {current: 0, min: 2, max: 5},
-        4: {current: 0, min: 1, max: 3}
-    }
-    // finds current 'formation' of the squad by updating positions dictionary
-    squad.firstEleven.forEach(player => {
-        positions[player.position as Position].current++
-    })
-
-    // prevents invalid formations using positions lookup dictionary
-    if (startingPlayer.position !== subPlayer.position) {
-        const startingPosition = positions[startingPlayer.position as Position]
-        const subPosition = positions[subPlayer.position as Position]
-        if (subPosition.current === subPosition.max) {
-            console.log("invalid formation")
-            const updatedSquad = unselectPlayers(squad)
-            return updatedSquad
-        }
-        if (startingPosition.current === startingPosition.min) {
-            console.log("Invalid Formation")
-            const updatedSquad = unselectPlayers(squad)
-            return updatedSquad
-        }
-    }
-
-    subPlayer.inSubs = false
-    subPlayer.inFirstEleven = true
-    subPlayer.isSelected = false
-    startingPlayer.inSubs = true
-    startingPlayer.inFirstEleven = false
-    startingPlayer.isSelected = false
-
-    const startingIndex = squad.firstEleven.findIndex(player => player.id === startingPlayer.id)
-    const subIndex = squad.subs.findIndex(player => player.id === subPlayer.id)
-
-    // Swap in firstEleven at the correct index
-    const updatedFirstEleven = [
-        ...squad.firstEleven.slice(0, startingIndex),
-        subPlayer,
-        ...squad.firstEleven.slice(startingIndex + 1)
-    ];
-
-    // Swap in subs at the correct index
-    const updatedSubs = [
-        ...squad.subs.slice(0, subIndex),
-        startingPlayer,
-        ...squad.subs.slice(subIndex + 1)
-    ]
-
-    const updatedSquad = {
-        firstEleven: updatedFirstEleven,
-        subs: updatedSubs
-    }
-    return updatedSquad
-}
-
-
-
-export function transferPlayer(currentSquad: SquadType, teams: Team[], newPlayer: Player | undefined, oldPlayer: Player | undefined) {
-
-    if (!newPlayer || !oldPlayer) {
-        console.log("Please select two players")
-        return currentSquad
-    }
-
-    // create a lookup dict of teams in current squad
-    const teamDict: Record<number, { count: number, limit: number }> = {}
+    const teamDict: Record<number, {count: number, limit: number}> = {}
     teams.forEach(team => {
         teamDict[team.id] = { count: 0, limit: 3 }
     })
-    currentSquad.firstEleven.forEach(player => {
-        teamDict[player.team_id].count++
-    })
-    currentSquad.subs.forEach(player => {
-        teamDict[player.team_id].count++
-    })
 
-    // ensures that new player doesnt increase a single teams no. of players past 3
-    if (newPlayer.team_id !== oldPlayer.team_id) {
-        const currentTeamCount = teamDict[newPlayer.team_id].count
-        const currentTeamLimit = teamDict[newPlayer.team_id].limit
-        if (currentTeamCount === currentTeamLimit) {
-            console.log("Maximum of 3 players per team")
-            return currentSquad
+    const initialSquad = []
+    for (const player of highOwnedPlayers) {
+        const teamId = player.team_id
+        const position = player.position as Position
+        if (
+            positions[position].count < positions[position].limit && 
+            teamDict[teamId].count < teamDict[teamId].limit
+        ) {
+            initialSquad.push(player)
+            positions[position].count++
+            teamDict[teamId].count++
+        }
+        if (initialSquad.length >= 15) {
+            break
+        }
+    }
+
+    const fullSquad = initialSquad.map(player => {
+        const position = player.position as Position
+        if (firstEleven[position].count < firstEleven[position].limit) {
+            firstEleven[position].count++
+            return {
+                ...player,
+                inFirstEleven: true
+            }
+        }
+        else {
+            return {
+                ...player,
+                inSubs: true
+            }
+        }
+    })
+    return fullSquad.sort((a, b) => a.position - b.position)
+}
+
+// returns updatedSquad with ableToSub property set correctly
+export function playersAbleToSub(clickedPlayer: Player, currentSquad: Player[]) {
+    type Position = 1 | 2 | 3 | 4
+    const firstEleven: Record<Position, {count: number, min: number, max: number}> = {
+        1: { count: 0, min: 1, max: 1},
+        2: { count: 0, min: 3, max: 5},
+        3: { count: 0, min: 2, max: 5},
+        4: { count: 0, min: 1, max: 3}
+    }
+
+    // finds current 'formation'
+    for (const player of currentSquad) {
+        if (player.inFirstEleven){
+            firstEleven[player.position as Position].count++
+        }
+    }
+    const clickedPlayerPosCount = firstEleven[clickedPlayer.position as Position].count
+    const clickedPlayerPosMin = firstEleven[clickedPlayer.position as Position].min
+    
+    const updatedSquad = currentSquad.map(player => {
+
+        if (player.id === clickedPlayer.id) {
+            return {
+                ...player,
+                ableToSub: true,
+                isSelected: true
+            }
         } 
-    }
 
-    // stops transfer of player in different position
-    if (oldPlayer.position !== newPlayer.position) {
-        console.log("Cannot transfer players of different positions")
-        return currentSquad
-    }
+        // if clicked player in same group as player, keep able to sub as false
+        if (player.inFirstEleven === clickedPlayer.inFirstEleven ) {
+            return player
+        } 
+        // if same position, add AbleToSub as true
+        else if (player.position === clickedPlayer.position) {
+            return {
+                ...player,
+                ableToSub: true
+            }
+        } 
+        /**
+         * if player in subs, keep abletosub as false if:
+         * if i click a mid, need to make sure that clicked player is not on the min
+         */
+        else if (player.inSubs) {
+            // if the position of the player being subbed out of first eleven is the min, then dont allow the sub
+            // skips if clickedPlayer can be subbed out
+            if (clickedPlayerPosCount === clickedPlayerPosMin) {
+                return player
+            }
+            else if (player.position === 1) {
+                return player
+            }
+            return {
+                ...player,
+                ableToSub: true
+            }
+        }
+        // only get this far if clicked player is in subs (so player is in firstEleven)
+        // if player to be subbed out has min no of players in that position, then dont allow the sub
+        if (firstEleven[player.position as Position].count === firstEleven[player.position as Position].min) {
+            return player
+        }
+        if (clickedPlayer.position === 1) {
+            return player
+        }
+        return {
+            ...player,
+            ableToSub: true
+        }              
+    })
+    return updatedSquad
+}  
 
-    // checks if player trying to transfer in is already in the squad
-    if (
-        currentSquad.firstEleven.find(player => player.id === newPlayer.id) ||
-        currentSquad.subs.find(player => player.id === newPlayer.id)
-    ) {
-        console.log("Player already in squad")
-        return currentSquad
-    }
+// function will only run if subInProgress
+export function completeSub(clickedPlayer: Player, currentSquad: Player[]) {
+    const updatedSquad = currentSquad.map((player: Player) => {
+        // if same player clicked twice, cancel the sub
+        if (player.id === clickedPlayer.id && player.isSelected) {
+            return {
+                ...player,
+                ableToSub: false,
+                isSelected: false
+            }
+        }
+        // swap inSubs and inFirstELeven properties for clicked player and selected player
+        if (player.id === clickedPlayer.id || player.isSelected) {
+            return {
+                ...player,
+                inSubs: !player.inSubs,
+                inFirstEleven: !player.inFirstEleven,
+                ableToSub: false,
+                isSelected: false
+            }
+        }
+        return {
+            ...player,
+            ableToSub: false
+        }
+    })
+    return updatedSquad
+}
 
-    const firstElevenIndex = currentSquad.firstEleven.findIndex(player => player.id === oldPlayer.id)
-    const subIndex = currentSquad.subs.findIndex(player => player.id === oldPlayer.id)
-
-    let updatedSquad
-    // if the oldplayer is in the first eleven
-    if (firstElevenIndex !== -1) {
-        // use .slice to remove old player and replace with new player
-        const updatedFirstEleven = [
-            ...currentSquad.firstEleven.slice(0, firstElevenIndex),
-            {...newPlayer, inFirstEleven: true},
-            ...currentSquad.firstEleven.slice(firstElevenIndex + 1)
-        ]
-        updatedSquad = {
-            firstEleven: updatedFirstEleven,
-            subs: currentSquad.subs
+export function prevGameweek(gameweek: Gameweek, gameweekArray: Gameweek[]) {
+    // check that prevGameweek is not below 1
+    // find previous gw in gameweeks array, then update the value of state
+    if (gameweek.id > 1) {
+        const prevGameweek = gameweekArray.find(gw => gw.id === gameweek.id - 1)
+        if (prevGameweek) {
+            return prevGameweek
         }
     }
-    // if oldPlayer in subs
-    else if (subIndex !== -1) {
-        const updatedSubs = [
-            ...currentSquad.subs.slice(0, subIndex),
-            {...newPlayer, inSubs: true},
-            ...currentSquad.subs.slice(subIndex + 1)
-        ]
-        updatedSquad = {
-            firstEleven: currentSquad.firstEleven,
-            subs: updatedSubs
-        }
-    } 
-    else {
-        console.log("must swap players from in and out of the squad")
-        return currentSquad
-    }
+    return gameweek
+}
 
-    // checks if squad array has been filled before returning
-    if (updatedSquad.firstEleven.length > 0 && updatedSquad.subs.length > 0) {
-        return updatedSquad
-    } 
-    else {
-        return currentSquad
+export function nextGameweek(gameweek: Gameweek, gameweekArray: Gameweek[]) {
+    // check that prevGameweek is not below 1
+    // find previous gw in gameweeks array, then update the value of state
+    if (gameweek.id > 1) {
+        const nextGameweek = gameweekArray.find(gw => gw.id === gameweek.id + 1)
+        if (nextGameweek) {
+            return nextGameweek
+        }
     }
+    return gameweek
 }
 
 export function filterPlayers(view: string, sort: string, maxPrice: number, initialPlayers: Player[]) {
@@ -359,4 +302,77 @@ export function getBgColor(rank: number) {
     if (rank >= 13 && rank <= 16) return "bg-green-300 text-black"; // Light Green
     if (rank >= 17 && rank <= 20) return "bg-green-700 text-gray-100"; // Dark Green
     else return ""
+}
+
+// return updated squad
+// sets isRemoved to true, but need another func:
+// complete transfer, which updates the inSubs/inFirstEleven properties
+export function removePlayer(clickedPlayer: Player, currentSquad: Player[]) {
+    const updatedSquad = currentSquad.map(player => {
+        if (player.id === clickedPlayer.id) {
+            return {
+                ...player,
+                isRemoved: true
+            }
+        }
+        else return player
+    })
+    return updatedSquad
+    // returns either updatedSquad or old currentSquad
+}
+
+// sets isRemoved property of clickedPlayer to false
+// everything else remains the same
+export function restorePlayer(clickedPlayer: Player, currentSquad: Player[]) {
+    const updatedSquad = currentSquad.map(player => {
+        if (player.id === clickedPlayer.id) {
+            return {
+                ...player,
+                isRemoved: false
+            }
+        }
+        else return player
+    })
+    return updatedSquad
+    // returns either updatedSquad or old currentSquad
+}
+
+// adds clicked player (from table) at the correct index of removed player,
+// with the same properties (subs/11) as the removed player
+export function completeSquadTransfer(clickedPlayer: Player, removedPlayers: Player[], currentSquad: Player[]) {
+    
+    const removedPlayer = removedPlayers.find(player => player.position === clickedPlayer.position)
+    const removedPlayerIndex = currentSquad.findIndex(player => player.id === removedPlayer?.id)
+    if (removedPlayer) {
+        return [
+            ...currentSquad.slice(0, removedPlayerIndex),
+            {
+                ...clickedPlayer,
+                inSubs: removedPlayer.inSubs,
+                inFirstEleven: removedPlayer.inFirstEleven
+            },
+            ...currentSquad.slice(removedPlayerIndex + 1)
+        ]
+    }
+    else {
+        console.log("Transfer not possible, invalid formation")
+        return currentSquad
+    }
+    // if removedPlayer not found then return currentSquad
+}
+
+
+export function updatePlayersAfterTransfer(removedPlayer: Player, players: Player[]) {
+    const updatedPlayers = players.map(player => {
+        if (player.id === removedPlayer.id) {
+            return {
+                ...player,
+                inSubs: false,
+                inFirstEleven: false,
+                isRemoved: false
+            }
+        }
+        else return player
+    })
+    return updatedPlayers
 }

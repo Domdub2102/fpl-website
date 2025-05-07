@@ -1,17 +1,20 @@
 'use client'
 
 import React from 'react'
-import { PlayerDialog } from '../PlayerDialog/PlayerDialog'
+import PlayerDialog from '../PlayerDialog/PlayerDialog'
 import { useSquad } from '@/lib/context/SquadContext'
-import PlayerDetails from './PlayerDetails'
+import PlayerRow from './PlayerRow'
 
+interface PlayersTableProps {
+    currentPage: number
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+}
 
-export default function PlayersTable () { 
+export default function PlayersTable({ currentPage, setCurrentPage }: PlayersTableProps) { 
 
     const { players } = useSquad()
 
-    const [currentPage, setCurrentPage] = React.useState(1)
-    const pageSize = 10
+    const pageSize = 14
     const startIndex = pageSize * (currentPage - 1)
     const endIndex = startIndex + pageSize
     const totalPages = Math.ceil(players.length / pageSize)
@@ -30,40 +33,33 @@ export default function PlayersTable () {
         }
     }
 
-
     return (
         <div>
-            <table className='table table-compact w-full'>
+            <table className='w-full'>
                 <thead className='text-black'>
-                    <tr className='p-0 m-0'>
-                        <th className='w-1/8 p-0 pl-5'></th>
-                        <th className='p-0 pl-5'></th>
-                        <th className='w-1/8 p-0 pl-5'>£</th>
-                        <th className='w-1/8 p-0 pl-5'>**</th>
+                    <tr >
+                        <th className='w-3/4'></th>
+                        <th className='w-1/8'>£</th>
+                        <th className='w-1/8'>**</th>
                     </tr>
                 </thead>
                 <tbody>
                     {slicedPlayers.map(player => {
                         return (
                             // need to add an onclick function here to select a player 
-                            <tr 
-                                className='items-center'
-                                key={player.id} 
-                            >
-                                <td>
+                            <tr key={player.id}>
+                                <td className='border-b-1 border-gray-400 py-[2px]'>
                                     <PlayerDialog 
                                         player={player} 
                                         openDialog={
-                                            <div className='btn btn-circle shadow-none w-[15px] h-[15px] m-0 p-1'>
-                                                +
-                                            </div>
+                                            <PlayerRow player={player}/>
                                         }
-                                    />
+                                    />  
                                 </td>
-                                <PlayerDetails player={player} />
-                                <td >{player.now_cost.toFixed(1)}</td>
-                                <td >{player.total_points}</td>
+                                <td className='border-b-1 border-gray-400 text-center text-sm py-[2px]'>{player.now_cost.toFixed(1)}</td>
+                                <td className='border-b-1 border-gray-400 text-center text-sm py-[2px]'>{player.total_points}</td>
                             </tr>
+                              
                         )
                     })}
                 </tbody>

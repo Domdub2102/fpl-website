@@ -1,5 +1,5 @@
 import React from 'react'
-import { createInitialSquad, createFullSquad, addFixturesToPlayers, initialSort } from '@/lib/utils/utils'
+import { addFixturesToPlayers, initialSort, createSquad } from '@/lib/utils/utils'
 import { Player, Team, Gameweek } from '@/types/types'
 import { fetchPlayers } from '@/lib/fetchers/players'
 import { fetchTeams } from '@/lib/fetchers/teams'
@@ -20,11 +20,11 @@ export default async function SquadPage() {
 
     const updatedPlayers = addFixturesToPlayers(players, teams)
 
-    // create initial squad by passing in players array to createInitialSquad util function
-    const initialSquad = createInitialSquad(updatedPlayers, teams)
-    const fullSquad = createFullSquad(initialSquad, 3, 4, 3)
+    const newSquad = createSquad(updatedPlayers, teams)
 
     // sorts the players, initially by total points
+    // COULD ALSO FILTER OUT PLAYERS WHO ARE IN THE SQUAD
+    // DO I WANT TO SHOW PLAYERS IN THE TABLE WHO ARE IN THE SQUAD OR NOT??
     const sortedPlayers = initialSort(updatedPlayers)
 
     return (
@@ -34,7 +34,7 @@ export default async function SquadPage() {
             </div>
             <div className='flex flex-col md:flex-row lg:flex-row justify-center w-full md:gap-2 lg:gap-[20px]'>
                 <SquadProvider>
-                    <Squad initialSquad={fullSquad} teams={teams} gameweeks={gameweeks}/>
+                    <Squad initialSquad={newSquad} gameweeks={gameweeks}/>
                     <PlayerSelector initialPlayers={sortedPlayers} teams={teams}/>
                 </SquadProvider>
             </div>

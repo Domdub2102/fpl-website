@@ -30,6 +30,9 @@ export async function fetchPlayers() {
                 inFirstEleven: false,
                 inSubs: false,
                 isSelected: false,
+                isRemoved: false,
+                waitingForSub: false,
+                ableToSub: false,
             }))
             
         return players

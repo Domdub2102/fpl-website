@@ -16,6 +16,7 @@ export default function PlayerSelector({
 
     const { setPlayers } = useSquad()
 
+    const [currentPage, setCurrentPage] = React.useState<number>(1)
     const [view, setView] = React.useState("All Players")
     const [sort, setSort] = React.useState("Total Points")
     const [maxPrice, setMaxPrice] = React.useState(15.0)
@@ -43,15 +44,8 @@ export default function PlayerSelector({
                 setPlayers(searchedPlayers)
             }
         }
+        setCurrentPage(1)
     }, [view, sort, maxPrice, searchInput])
-
-    // filters the players based on the player search input 
-    React.useEffect(() => {
-        // first, add an onChange to the input, to set the searchInput state
-        // then, use the searchInput value to filter the players state
-        console.log(searchInput)
-        
-    }, [searchInput])
 
 
     const priceOptions = []
@@ -122,7 +116,7 @@ export default function PlayerSelector({
                     className='bg-[#c0fcf7] mb-[15px] xl:mb-7 p-[5px] text-[14px] font-[400] rounded-sm'
                     onChange={e => setSearchInput(e.target.value)}
                 />
-                <PlayersTable />
+                <PlayersTable currentPage={currentPage} setCurrentPage={setCurrentPage}/>
             </div>
         </div>
     )

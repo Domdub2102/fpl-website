@@ -8,13 +8,10 @@ UI Fixes:
 - Subs bench
 - 'selected' player in table for transfers
 - Grey out players that you cannot swap/transfer
-- More detail in the player table:
-    - kit icon (sm), name-bold, team, position 
-    - general UI improvements
+- removing a player auto filters the players table to their position
 
 
 To Do:
-- Player search functionality
 - Transfers:
     - Remove transfers for now?
     - Other option is add 'Create (set) Initial Squad' button, which stores users team as the base, then counts transfers from there
@@ -24,3 +21,14 @@ To Do:
 - add dark theme to squad and fixtures page?
 - Team Selector checklist in FDR page
 - Ability to click on GW headers ans sort for that individual week
+- useMemo() to prevent unnecessary reruns of function initialisations
+
+
+Major Changes:
+- FORM:
+    - Allow the user to look at 'form' tables of both teams and players 
+    - Need to have recent xG data of teams:
+    - Either scrape off understat, or calculate using players fixtures:
+    - Need to iterate fixtures and add to TeamXG array
+
+

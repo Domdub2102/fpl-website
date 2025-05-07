@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext } from "react"
-import { SquadContextType, SquadType, Player } from "@/types/types"
+import { SquadContextType, Player } from "@/types/types"
 
 export const SquadContext = createContext<SquadContextType | undefined>(undefined)
 
@@ -10,17 +10,12 @@ export default function SquadProvider({
 }: {
     children: React.ReactNode
 }) {
-    const [currentSquad, setCurrentSquad] = React.useState<SquadType>({
-        firstEleven: [],
-        subs: []
-    })
+    const [currentSquad, setCurrentSquad] = React.useState<Player[]>([])
     const [players, setPlayers] = React.useState<Player[]>([])
 
-    const [startingPlayer, setStartingPlayer] = React.useState<Player | undefined>()
-    const [subPlayer, setSubPlayer] = React.useState<Player | undefined>()
+    const [removedPlayers, setRemovedPlayers] = React.useState<Player[]>([])
 
-    const [transferIn, setTransferIn] = React.useState<Player | undefined>()
-    const [transferOut, setTransferOut] = React.useState<Player | undefined>()
+    const [subInProgress, setSubInProgress] = React.useState<boolean>(false)
 
     const [gameweek, setGameweek] = React.useState({id: 1, name: "Gameweek 1", deadline_time: "2024-08-16T17:30:00Z"})
     
@@ -32,14 +27,10 @@ export default function SquadProvider({
                 setPlayers,
                 currentSquad,
                 setCurrentSquad,
-                startingPlayer,
-                setStartingPlayer,
-                subPlayer,
-                setSubPlayer,
-                transferIn,
-                setTransferIn,
-                transferOut,
-                setTransferOut,
+                removedPlayers,
+                setRemovedPlayers,
+                subInProgress,
+                setSubInProgress,
                 gameweek,
                 setGameweek
             }}

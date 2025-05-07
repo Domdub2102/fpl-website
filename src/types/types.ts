@@ -57,7 +57,9 @@ export interface Player {
     fixtures: Fixture[]
     inFirstEleven: boolean
     inSubs: boolean
+    ableToSub: boolean
     isSelected: boolean
+    isRemoved: boolean 
 }
 
 export interface Gameweek {
@@ -74,16 +76,12 @@ export interface SquadType {
 export interface SquadContextType {
     players: Player[] 
     setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
-    currentSquad: SquadType
-    setCurrentSquad: React.Dispatch<React.SetStateAction<SquadType>>
-    startingPlayer: Player | undefined
-    setStartingPlayer: React.Dispatch<React.SetStateAction<Player | undefined>>
-    subPlayer: Player | undefined
-    setSubPlayer: React.Dispatch<React.SetStateAction<Player | undefined>>
-    transferIn: Player | undefined
-    transferOut: Player | undefined
-    setTransferIn: React.Dispatch<React.SetStateAction<Player | undefined>>
-    setTransferOut: React.Dispatch<React.SetStateAction<Player | undefined>>
+    currentSquad: Player[]
+    setCurrentSquad: React.Dispatch<React.SetStateAction<Player[]>>
+    removedPlayers: Player[]
+    setRemovedPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+    subInProgress: boolean,
+    setSubInProgress: React.Dispatch<React.SetStateAction<boolean>>
     gameweek: Gameweek
     setGameweek: React.Dispatch<React.SetStateAction<Gameweek>>
 }
