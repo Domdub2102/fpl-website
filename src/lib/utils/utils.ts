@@ -226,7 +226,7 @@ export function prevGameweek(gameweek: Gameweek, gameweekArray: Gameweek[]) {
 export function nextGameweek(gameweek: Gameweek, gameweekArray: Gameweek[]) {
     // check that prevGameweek is not below 1
     // find previous gw in gameweeks array, then update the value of state
-    if (gameweek.id > 1) {
+    if (gameweek.id >= 1) {
         const nextGameweek = gameweekArray.find(gw => gw.id === gameweek.id + 1)
         if (nextGameweek) {
             return nextGameweek
