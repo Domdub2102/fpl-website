@@ -18,6 +18,8 @@ export default async function SquadPage() {
     const players: Player[] = await fetchPlayers()
     const gameweeks: Gameweek[] = await fetchGameweeks()
 
+    console.log(`Players: ${players.slice(0,10)}`)
+
     const updatedPlayers = addFixturesToPlayers(players, teams)
 
     const newSquad = createSquad(updatedPlayers, teams)

@@ -10,10 +10,12 @@ export async function fetchPlayers() {
 
         const data = await res.json()
 
+        console.log(data)
+
         // filter removes any managers (element_type = 5)
         // can_select property is false for players who are unavailable
         const players = data
-            .filter((player: Player) => player.element_type !== 5 && player.can_select)
+            .filter((player: Player) => player.element_type !== 5)
             .map((player: Player) => ({
                 id: player.id,
                 web_name: player.web_name,
@@ -34,7 +36,7 @@ export async function fetchPlayers() {
                 waitingForSub: false,
                 ableToSub: false,
             }))
-            
+        console.log(players)
         return players
     }
     catch (error) {
