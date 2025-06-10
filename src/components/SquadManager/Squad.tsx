@@ -28,7 +28,6 @@ export default function Squad(
     const [squadValue, setSquadValue] = React.useState("0")
 
     // find first gameweek which has a future deadline (ie. the current gameweek)
-    const now = new Date()
     const currentGameweek = gameweeks.find(gameweek => gameweek.id === 1)
 
     // sets initial value of squad and gameweek on first render
